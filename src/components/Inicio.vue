@@ -14,163 +14,252 @@
         </div>
         <v-layout row wrap>
 
-            <v-flex xs12 sm6 md3 lg3 >
+            <v-flex md12>
+                <v-tabs
+                    v-model="active"
+                    color="primary"
+                    dark
+                    slider-color="yellow"
+                >
+                    <v-tab
+                        v-for="missoes in missoesAbas"
+                        :key="missoes.status"
+                        ripple
+                    >
+                        {{ missoes.aba }}
 
-                <v-card class="ma-2">
-                    
-                    <h1 class="text-xs-center titulo green--text">Missões Fáceis</h1>
+                    </v-tab>
+                    <v-tab-item
+                        v-for="missoes in missoesAbas"
+                        :key="missoes.status"
+                    >
+                        <v-card flat>
+                            <v-layout row wrap>
 
-                    <div v-if="listaMissoesUsuarioFacil.length == 0">
-                        <br>
-                        <h2 class="text-xs-center">Nenhuma Missão Desta Dificuldade</h2>
-                    </div>
+                                <v-flex xs12 sm6 md3 lg3 >
 
-                    <div v-else>
+                                    <v-card class="ma-2">
+                                        
+                                        <h1 class="text-xs-center titulo green--text">Missões Fáceis</h1>
 
-                        <v-card flat class="text-xs-center ma-3" elevation="5" dark v-for="missaoFacil in listaMissoesUsuarioFacil" :key="missaoFacil.cd_usuario_missao">
-                    
-                            <v-card-text>
-                                <div class="subheading">
-                                    {{ missaoFacil.missao.nm_missao }}
-                                </div>
-                                <div :class="retornaCorPrioridade(missaoFacil.missao.cd_missao_prioridade.cd_missao_prioridade)">
-                                    {{ missaoFacil.missao.cd_missao_prioridade.nm_missao_prioridade }}
-                                </div>
-                                <div class="white--text">
-                                    {{ missaoFacil.dt_cadastro }}
-                                </div>
-                            </v-card-text>
+                                        <div v-if="listaMissoesUsuarioFacil.length == 0">
+                                            <br>
+                                            <h2 class="text-xs-center">Nenhuma Missão Desta Dificuldade</h2>
+                                        </div>
 
-                            <div class="text-xs-center">
-                                <v-card-actions>
-                                    <v-btn block color="green" style="color: white" @click="infoMissao(missaoFacil.missao.cd_missao)">
-                                        <span>Acessar</span>
-                                    </v-btn>
-                                </v-card-actions>
-                            </div>
+                                        <div 
+                                            v-else 
+                                            v-for="missaoFacil in listaMissoesUsuarioFacil" 
+                                            :key="missaoFacil.cd_usuario_missao"
+                                            >
+
+                                            <div v-if="missaoFacil.cd_missao_status.cd_missao_status == missoes.status">
+                                                
+                                                <v-card flat class="text-xs-center ma-3" elevation="5" dark >
+                                            
+                                                    <v-card-text>
+                                                        <div class="subheading">
+                                                            {{ missaoFacil.missao.nm_missao }}
+                                                        </div>
+                                                        <div :class="retornaCorPrioridade(missaoFacil.missao.cd_missao_prioridade.cd_missao_prioridade)">
+                                                            {{ missaoFacil.missao.cd_missao_prioridade.nm_missao_prioridade }}
+                                                        </div>
+                                                        <div class="white--text">
+                                                            {{ missaoFacil.dt_cadastro }}
+                                                        </div>
+                                                        <div class="white--text">
+                                                            {{ missaoFacil.cd_missao_status.nm_missao_status }}
+                                                        </div>
+                                                    </v-card-text>
+
+                                                    <div class="text-xs-center">
+                                                        <v-card-actions>
+                                                            <v-btn block color="green" style="color: white" @click="infoMissao(missaoFacil.missao.cd_missao)">
+                                                                <span>Acessar</span>
+                                                            </v-btn>
+                                                        </v-card-actions>
+                                                    </div>
+                                                </v-card>
+
+                                            </div>
+
+                                            <div v-else>
+                                                <br>
+                                                <h2 class="text-xs-center">Nenhuma Missão Deste Status</h2>
+                                            </div>
+
+                                        </div>
+                                        
+                                        <div class="espaco"></div>
+                                    </v-card>
+                                
+                                </v-flex>
+
+                                <!-- COLAR AQUI INICIO -->
+
+                                <v-flex xs12 md3>
+                                    <v-card class="ma-2">
+                                        <h1 class="text-xs-center titulo warning--text">Missões Medianas</h1>
+
+                                        <div v-if="listaMissoesUsuarioMedia.length == 0">
+                                            <br>
+                                            <h2 class="text-xs-center">Nenhuma Missão Desta Dificuldade</h2>
+                                        </div>
+
+                                        <div 
+                                            v-else
+                                            v-for="missaoMedia in listaMissoesUsuarioMedia" 
+                                            :key="missaoMedia.cd_usuario_missao">
+
+                                            <div v-if="missaoMedia.cd_missao_status.cd_missao_status == missoes.status">
+
+                                                <v-card flat class="text-xs-center ma-3" elevation="5" dark>
+                                            
+                                                    <v-card-text>
+                                                        <div class="subheading">
+                                                            {{ missaoMedia.missao.nm_missao }}
+                                                        </div>
+                                                        <div :class="retornaCorPrioridade(missaoMedia.missao.cd_missao_prioridade.cd_missao_prioridade)">
+                                                            {{ missaoMedia.missao.cd_missao_prioridade.nm_missao_prioridade }}
+                                                        </div>
+                                                        <div class="white--text">
+                                                            {{ missaoMedia.dt_cadastro }}
+                                                        </div>
+                                                    </v-card-text>
+                                                    <div class="text-xs-center">
+                                                        <v-card-actions>
+                                                            <v-btn block color="warning" style="color: white" @click="infoMissao(missaoMedia.missao.cd_missao)">
+                                                                <span>Acessar</span>
+                                                            </v-btn>
+                                                        </v-card-actions>
+                                                    </div>
+                                                </v-card>
+
+                                            </div>
+                                            <div v-else>
+                                                <br>
+                                                <h2 class="text-xs-center">Nenhuma Missão Deste Status</h2>
+                                            </div>
+
+                                        </div>
+                                        <div class="espaco"></div>
+                                    </v-card>
+
+                                </v-flex>
+
+                                <v-flex xs12 md3>
+                
+                                    <v-card class="ma-2">
+                                        
+                                        <h1 class="text-xs-center titulo red--text">Missões Difíceis</h1>
+
+                                        <div v-if="listaMissoesUsuarioDificil.length == 0">
+                                            <br>
+                                            <h2 class="text-xs-center">Nenhuma Missão Desta Dificuldade</h2>
+                                        </div>
+
+                                        <div 
+                                            v-else
+                                            v-for="missaoDificil in listaMissoesUsuarioDificil" 
+                                            :key="missaoDificil.cd_usuario_missao">
+                                            
+                                            <div v-if="missaoDificil.cd_missao_status.cd_missao_status == missoes.status"> 
+
+                                                <v-card flat class="text-xs-center ma-3" elevation="5" dark>
+                                            
+                                                    <v-card-text>
+                                                        <div class="subheading">
+                                                            {{ missaoDificil.missao.nm_missao }}
+                                                        </div>
+                                                        <div :class="retornaCorPrioridade(missaoDificil.missao.cd_missao_prioridade.cd_missao_prioridade)">
+                                                            {{ missaoDificil.missao.cd_missao_prioridade.nm_missao_prioridade }}
+                                                        </div>
+                                                        <div class="white--text">
+                                                            {{ missaoDificil.dt_cadastro }}
+                                                        </div>
+                                                    </v-card-text>
+                                                    <div class="text-xs-center">
+                                                        <v-card-actions>
+                                                            <v-btn block color="red" style="color: white" @click="infoMissao(missaoDificil.missao.cd_missao)">
+                                                                <span>Acessar</span>
+                                                            </v-btn>
+                                                        </v-card-actions>
+                                                    </div>
+                                                </v-card>
+
+                                            </div>
+                                            <div v-else>
+                                                <br>
+                                                <h2 class="text-xs-center">Nenhuma Missão Deste Status</h2>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="espaco"></div>
+                                    </v-card>
+
+                                </v-flex>
+
+                                <v-flex xs12 md3>
+                
+                                    <v-card class="ma-2">
+                                        
+                                        <h1 class="text-xs-center titulo red--text text--darken-2">Missões Muito Difíceis</h1>
+                                    
+                                        <div v-if="listaMissoesUsuarioMuitoDificil.length == 0">
+                                            <br>
+                                            <h2 class="text-xs-center">Nenhuma Missão Desta Dificuldade</h2>
+                                        </div>
+
+                                        <div 
+                                            v-else
+                                            v-for="missaoMuitoDificil in listaMissoesUsuarioMuitoDificil" 
+                                            :key="missaoMuitoDificil.cd_usuario_missao">
+
+                                            <div v-if="missaoDificil.cd_missao_status.cd_missao_status == missoes.status"> 
+                                                <v-card flat class="text-xs-center ma-3" elevation="5" dark>
+                                            
+                                                    <v-card-text>
+                                                        <div class="subheading">
+                                                            {{ missaoMuitoDificil.missao.nm_missao }}
+                                                        </div>
+                                                        <div :class="retornaCorPrioridade(missaoMuitoDificil.missao.cd_missao_prioridade.cd_missao_prioridade)">
+                                                            {{ missaoMuitoDificil.missao.cd_missao_prioridade.nm_missao_prioridade }}
+                                                        </div>
+                                                        <div class="white--text">
+                                                            {{ missaoMuitoDificil.dt_cadastro }}
+                                                        </div>
+                                                    </v-card-text>
+                                                    <div class="text-xs-center">
+                                                        <v-card-actions>
+                                                            <v-btn block color="red accent-4" style="color: white" @click="infoMissao(missaoMuitoDificil.missao.cd_missao)">
+                                                                <span>Acessar</span>
+                                                            </v-btn>
+                                                        </v-card-actions>
+                                                    </div>
+                                                </v-card>
+                                            </div>
+                                            <div v-else>
+                                                <br>
+                                                <h2 class="text-xs-center">Nenhuma Missão Deste Status</h2>
+                                            </div>
+                                            
+                                        </div>
+                                        <div class="espaco"></div>
+                                    </v-card>
+                                    
+                                </v-flex>
+
+                                <!-- COLAR AQUI FIM -->
+                            </v-layout>
+                            
+
                         </v-card>
-                        
-                    </div>
-                    <div class="espaco"></div>
-                </v-card>
+                    </v-tab-item>
+                </v-tabs>
+            </v-flex>
+
             
-
-            </v-flex>
-            
-            <v-flex xs12 md3>
-                <v-card class="ma-2">
-                    <h1 class="text-xs-center titulo warning--text">Missões Medianas</h1>
-
-                    <div v-if="listaMissoesUsuarioMedia.length == 0">
-                        <br>
-                        <h2 class="text-xs-center">Nenhuma Missão Desta Dificuldade</h2>
-                    </div>
-
-                    <div v-else>
-                        <v-card flat class="text-xs-center ma-3" elevation="5" dark v-for="missaoMedia in listaMissoesUsuarioMedia" :key="missaoMedia.cd_usuario_missao">
-                        
-                            <v-card-text>
-                                <div class="subheading">
-                                    {{ missaoMedia.missao.nm_missao }}
-                                </div>
-                                <div :class="retornaCorPrioridade(missaoMedia.missao.cd_missao_prioridade.cd_missao_prioridade)">
-                                    {{ missaoMedia.missao.cd_missao_prioridade.nm_missao_prioridade }}
-                                </div>
-                                <div class="white--text">
-                                    {{ missaoMedia.dt_cadastro }}
-                                </div>
-                            </v-card-text>
-                            <div class="text-xs-center">
-                                <v-card-actions>
-                                    <v-btn block color="warning" style="color: white" @click="infoMissao(missaoMedia.missao.cd_missao)">
-                                        <span>Acessar</span>
-                                    </v-btn>
-                                </v-card-actions>
-                            </div>
-                        </v-card>
-                    </div>
-                    <div class="espaco"></div>
-                </v-card>
-
-            </v-flex>
-
-            <v-flex xs12 md3>
-                
-                <v-card class="ma-2">
-                    
-                    <h1 class="text-xs-center titulo red--text">Missões Difíceis</h1>
-
-                    <div v-if="listaMissoesUsuarioDificil.length == 0">
-                        <br>
-                        <h2 class="text-xs-center">Nenhuma Missão Desta Dificuldade</h2>
-                    </div>
-
-                    <div v-else>
-                        <v-card flat class="text-xs-center ma-3" elevation="5" dark v-for="missaoDificil in listaMissoesUsuarioDificil" :key="missaoDificil.cd_usuario_missao">
-                        
-                            <v-card-text>
-                                <div class="subheading">
-                                    {{ missaoDificil.missao.nm_missao }}
-                                </div>
-                                <div :class="retornaCorPrioridade(missaoDificil.missao.cd_missao_prioridade.cd_missao_prioridade)">
-                                    {{ missaoDificil.missao.cd_missao_prioridade.nm_missao_prioridade }}
-                                </div>
-                                <div class="white--text">
-                                    {{ missaoDificil.dt_cadastro }}
-                                </div>
-                            </v-card-text>
-                            <div class="text-xs-center">
-                                <v-card-actions>
-                                    <v-btn block color="red" style="color: white" @click="infoMissao(missaoDificil.missao.cd_missao)">
-                                        <span>Acessar</span>
-                                    </v-btn>
-                                </v-card-actions>
-                            </div>
-                        </v-card>
-                    </div>
-                    <div class="espaco"></div>
-                </v-card>
-
-            </v-flex>
-
-            <v-flex xs12 md3>
-                
-                <v-card class="ma-2">
-                    
-                    <h1 class="text-xs-center titulo red--text text--darken-2">Missões Muito Difíceis</h1>
-                
-                    <div v-if="listaMissoesUsuarioMuitoDificil.length == 0">
-                        <br>
-                        <h2 class="text-xs-center">Nenhuma Missão Desta Dificuldade</h2>
-                    </div>
-
-                    <div v-else>
-                        <v-card flat class="text-xs-center ma-3" elevation="5" dark v-for="missaoMuitoDificil in listaMissoesUsuarioMuitoDificil" :key="missaoMuitoDificil.cd_usuario_missao">
-                        
-                            <v-card-text>
-                                <div class="subheading">
-                                    {{ missaoMuitoDificil.missao.nm_missao }}
-                                </div>
-                                <div :class="retornaCorPrioridade(missaoMuitoDificil.missao.cd_missao_prioridade.cd_missao_prioridade)">
-                                    {{ missaoMuitoDificil.missao.cd_missao_prioridade.nm_missao_prioridade }}
-                                </div>
-                                <div class="white--text">
-                                    {{ missaoMuitoDificil.dt_cadastro }}
-                                </div>
-                            </v-card-text>
-                            <div class="text-xs-center">
-                                <v-card-actions>
-                                    <v-btn block color="red accent-4" style="color: white" @click="infoMissao(missaoMuitoDificil.missao.cd_missao)">
-                                        <span>Acessar</span>
-                                    </v-btn>
-                                </v-card-actions>
-                            </div>
-                        </v-card>
-                    </div>
-                    <div class="espaco"></div>
-                </v-card>
-                
-            </v-flex>
 
         <LoaderSave :texto="textoLoarder" :dialog="dialogLoader" :cor="corLoader" :barra="barraLoader"></LoaderSave>
 
@@ -397,17 +486,28 @@ export default {
     },
     data(){
         return {
+            active: null,
+            text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
             dialog: false,
             infoDescricao: false,
             dialogLoader: false,
             corLoader: 'primary',
-            textoLoarder: 'Carragndo Suas Missões',
+            textoLoarder: 'Carregando suas missões',
             barraLoader: true,
             listaMissoesUsuarioFacil: [],
             listaMissoesUsuarioMedia: [],
             listaMissoesUsuarioDificil: [],
             listaMissoesUsuarioMuitoDificil: [],
             descricao_completa: '',
+            missoesAbas: [
+                { aba: 'Em Aberto', status: 1 },
+                { aba: 'Iniciado', status: 2 },
+                { aba: 'Em Andamento', status: 3 },
+                { aba: 'Em Análise', status: 4 },
+                { aba: 'Pausada', status: 5 },
+                { aba: 'Finalizada', status: 6 },
+                { aba: 'Cancelada', status: 7 }
+            ],
             dadosMissao: {
                 missao: {
                     cd_missao: '',
@@ -515,7 +615,11 @@ export default {
                         this.limparMissoes()
                         
                         for(let i = 0; i < response.data.length; i++) {
+
+                            console.log(response.data[i].cd_missao_status.cd_missao_status)
+
                             if (response.data[i].missao.cd_missao_dificuldade == 1) {
+                                
                                 this.listaMissoesUsuarioFacil = this.listaMissoesUsuarioFacil.concat(response.data[i])
                             } 
 
@@ -524,7 +628,7 @@ export default {
                             } 
 
                             if (response.data[i].missao.cd_missao_dificuldade == 3) {
-                                this.listaMissoesUsuarioDificil = this.listaMissoesUsuarioDificil.concat(response.data[i])
+                                this.listaMissoesUsuarioDificil = this.listaMissoesUsuarioDificil.concat(respo+nse.data[i])
                             } 
 
                             if (response.data[i].missao.cd_missao_dificuldade == 4) {
