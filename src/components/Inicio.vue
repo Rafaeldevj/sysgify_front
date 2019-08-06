@@ -17,16 +17,23 @@
             <v-flex md12>
                 <v-tabs
                     v-model="active"
-                    color="primary"
+                    color="blue darken-3"
                     dark
                     slider-color="yellow"
+                    grow
                 >
                     <v-tab
                         v-for="missoes in missoesAbas"
                         :key="missoes.status"
                         ripple
                     >
-                        {{ missoes.aba }}
+                        
+                        <v-badge color="red">
+                            <template v-slot:badge>
+                                <span dark small>{{ missoes.tamanho }}</span>
+                            </template>
+                            <span>{{ missoes.aba }}</span>
+                        </v-badge>
 
                     </v-tab>
                     <v-tab-item
@@ -34,7 +41,7 @@
                         :key="missoes.status"
                     >
                         <v-card flat>
-                            <v-layout row wrap>
+                            <v-layout row wrap class="corpo_tab">
 
                                 <v-flex xs12 sm6 md3 lg3 >
 
@@ -67,14 +74,11 @@
                                                         <div class="white--text">
                                                             {{ missaoFacil.dt_cadastro }}
                                                         </div>
-                                                        <div class="white--text">
-                                                            {{ missaoFacil.cd_missao_status.nm_missao_status }}
-                                                        </div>
                                                     </v-card-text>
 
                                                     <div class="text-xs-center">
                                                         <v-card-actions>
-                                                            <v-btn block color="green" style="color: white" @click="infoMissao(missaoFacil.missao.cd_missao)">
+                                                            <v-btn block color="green" style="color: white" @click="infoMissao(missaoFacil)">
                                                                 <span>Acessar</span>
                                                             </v-btn>
                                                         </v-card-actions>
@@ -434,7 +438,7 @@
     
                         <v-btn color="red darken-1" dark @click="dialog = false"><v-icon dark>clear</v-icon>&nbsp; Fechar</v-btn>
                         <v-spacer></v-spacer>
-                        <v-btn color="primary darken-1" dark ><v-icon>power_settings_new</v-icon>&nbsp; Iniciar Missão</v-btn>
+                        <v-btn color="primary darken-1" dark @click="iniciarMissao(dadosMissao)"><v-icon>power_settings_new</v-icon>&nbsp; Iniciar Missão</v-btn>
                         
                     </v-card-actions>
                 </v-card>
@@ -500,14 +504,18 @@ export default {
             listaMissoesUsuarioMuitoDificil: [],
             descricao_completa: '',
             missoesAbas: [
-                { aba: 'Em Aberto', status: 1 },
-                { aba: 'Iniciado', status: 2 },
-                { aba: 'Em Andamento', status: 3 },
-                { aba: 'Em Análise', status: 4 },
-                { aba: 'Pausada', status: 5 },
-                { aba: 'Finalizada', status: 6 },
-                { aba: 'Cancelada', status: 7 }
+                { aba: 'Em Aberto', status: 1 , tamanho: 0},
+                { aba: 'Iniciado', status: 2 , tamanho: 0},
+                { aba: 'Em Andamento', status: 3 , tamanho: 0},
+                { aba: 'Em Análise', status: 4 , tamanho: 0},
+                { aba: 'Pausada', status: 5 , tamanho: 0},
+                { aba: 'Finalizada', status: 6 , tamanho: 0},
+                { aba: 'Cancelada', status: 7 , tamanho: 0}
             ],
+            usuarioMissao: {
+                cd_usuario_missao: '',
+                cd_missao_status: ''
+            },
             dadosMissao: {
                 missao: {
                     cd_missao: '',
@@ -545,6 +553,10 @@ export default {
             this.listaMissoesUsuarioDificil = []
             this.listaMissoesUsuarioMuitoDificil = []
 
+            for (let i = 0; i < this.missoesAbas.length; i++) {
+                this.missoesAbas[i].tamanho = 0
+            }
+
         },
 
         exibeDeescricao(descricao) {
@@ -571,10 +583,14 @@ export default {
 
         },
 
-        infoMissao(id) {
+        infoMissao(data) {
+
+            this.usuarioMissao.cd_usuario_missao = data.cd_usuario_missao
+            this.usuarioMissao.cd_missao_status = data.cd_missao_status.cd_missao_status 
+
             this.dialog = true
             
-            missaoService.informacaoMissao(id).then(
+            missaoService.informacaoMissao(data.missao.cd_missao).then(
                 (response) => {
                     this.dadosMissao = response.data
                 }
@@ -616,7 +632,15 @@ export default {
                         
                         for(let i = 0; i < response.data.length; i++) {
 
-                            console.log(response.data[i].cd_missao_status.cd_missao_status)
+                            for (let j = 0; j < this.missoesAbas.length; j++) {
+
+                                if(this.missoesAbas[j].status == response.data[i].cd_missao_status.cd_missao_status) {
+
+                                    this.missoesAbas[j].tamanho++
+
+                                }
+
+                            }
 
                             if (response.data[i].missao.cd_missao_dificuldade == 1) {
                                 
@@ -643,6 +667,21 @@ export default {
                 }
             )
 
+        },
+
+        iniciarMissao(data) {
+
+            inicioService.iniciarMissao(this.usuarioMissao).then(
+                (response) => {
+
+                    if (response.data.cd_usuario_missao > 0) {
+
+                        this.carregaMissoesUsuario()
+
+                    }
+                    
+                }
+            )
         }
 
     },
@@ -660,6 +699,11 @@ export default {
 
     padding-bottom: 8px;
 
+}
+
+.corpo_tab {
+
+    background-color: #fafafa
 }
 
 </style>
