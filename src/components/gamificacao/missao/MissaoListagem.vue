@@ -475,7 +475,7 @@ export default {
             bottomNav: 1,
             dialogLoader: false,
             corLoader: 'primary',
-            textoLoarder: 'Carragndo Missões',
+            textoLoarder: 'Carregando Missões',
             barraLoader: true,
             dialog: false,
             infoDescricao: false,

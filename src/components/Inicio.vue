@@ -438,7 +438,8 @@
     
                         <v-btn color="red darken-1" dark @click="dialog = false"><v-icon dark>clear</v-icon>&nbsp; Fechar</v-btn>
                         <v-spacer></v-spacer>
-                        <v-btn color="primary darken-1" dark @click="iniciarMissao(dadosMissao)"><v-icon>power_settings_new</v-icon>&nbsp; Iniciar Missão</v-btn>
+                        <v-btn color="yellow darken-1" dark @click="pausarMissao()" v-if="this.$store.state.grupo.cd_grupo == 1"><v-icon dark>pause</v-icon>&nbsp; Pausar</v-btn>
+                        <v-btn color="primary darken-1" dark @click="iniciarMissao()" :disabled="statusBotao"><v-icon>power_settings_new</v-icon>&nbsp; {{ retornaNomeBontaoStatusMissao() }}</v-btn>
                         
                     </v-card-actions>
                 </v-card>
@@ -491,13 +492,13 @@ export default {
     data(){
         return {
             active: null,
-            text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
             dialog: false,
             infoDescricao: false,
             dialogLoader: false,
+            statusBotao: false,
+            barraLoader: true,
             corLoader: 'primary',
             textoLoarder: 'Carregando suas missões',
-            barraLoader: true,
             listaMissoesUsuarioFacil: [],
             listaMissoesUsuarioMedia: [],
             listaMissoesUsuarioDificil: [],
@@ -661,7 +662,7 @@ export default {
                         }
 
                         this.dialogLoader = false
-
+                        
                     }, 1500);
 
                 }
@@ -669,19 +670,76 @@ export default {
 
         },
 
-        iniciarMissao(data) {
+        retornaNomeBontaoStatusMissao() {
+            let nomeBotao = ""
 
-            inicioService.iniciarMissao(this.usuarioMissao).then(
-                (response) => {
+            switch (this.usuarioMissao.cd_missao_status) {
+                case 1:
+                    nomeBotao = "Iniciar Missão"
+                    break
+                
+                case 2:
+                case 3:
+                    nomeBotao = "Enviar para Análise"
+                    break
 
-                    if (response.data.cd_usuario_missao > 0) {
+                case 4:    
+                    nomeBotao = "Em Análise" 
+                    if (this.$store.state.grupo.cd_grupo == 1) {
 
-                        this.carregaMissoesUsuario()
+                        this.statusBotao = false
+                    } else {
 
+                        this.statusBotao = true
                     }
-                    
-                }
-            )
+                    break
+                
+                case 5:
+                    if (this.$store.state.grupo.cd_grupo == 1) {
+
+                        this.statusBotao = false
+                    }    
+                    break
+
+                default:
+                    break
+            }
+
+            return nomeBotao
+        },
+
+        iniciarMissao() {
+
+            if (this.usuarioMissao.cd_missao_status <= 4) {
+
+                inicioService.iniciarMissao(this.usuarioMissao).then(
+                    (response) => {
+
+                        if (response.data.cd_usuario_missao > 0) {
+
+                            this.carregaMissoesUsuario()
+                            this.dialog = false
+
+                        } else {
+
+                            //EXIBIR MENSAGEM DE ERRO
+                        }
+                        
+                    }
+                ).catch((error) => {
+
+                    //EXIBIR MENSAGEM DE ERRO
+                })
+
+            }
+
+            
+        },
+
+        pausarMissao() {
+
+
+
         }
 
     },
