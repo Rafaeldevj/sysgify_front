@@ -10,6 +10,16 @@ export default {
     iniciarMissao(status) {
 
         return http.post(`/usuarioMissao/iniciarMissao`, status);
+    },
+
+    pausarMissao(id) {
+
+        return http.get(`/usuarioMissao/pausarMissao/${id}`)
+    },
+
+    retomarMissao(id) {
+
+        return http.get(`/usuarioMissao/retomarMissao/${id}`)
     }
 
 }

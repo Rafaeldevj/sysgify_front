@@ -438,8 +438,29 @@
     
                         <v-btn color="red darken-1" dark @click="dialog = false"><v-icon dark>clear</v-icon>&nbsp; Fechar</v-btn>
                         <v-spacer></v-spacer>
-                        <v-btn color="yellow darken-1" dark @click="pausarMissao()" v-if="this.$store.state.grupo.cd_grupo == 1"><v-icon dark>pause</v-icon>&nbsp; Pausar</v-btn>
-                        <v-btn color="primary darken-1" dark @click="iniciarMissao()" :disabled="statusBotao"><v-icon>power_settings_new</v-icon>&nbsp; {{ retornaNomeBontaoStatusMissao() }}</v-btn>
+
+                        <v-btn color="yellow darken-1" dark 
+                            @click="pausarMissao()" 
+                            v-if="this.$store.state.grupo.cd_grupo == 1 && this.usuarioMissao.cd_missao_status != 5">
+                            <v-icon dark>pause</v-icon>&nbsp; 
+                            Pausar
+                        </v-btn>
+
+                        <v-btn color="yellow darken-1" dark 
+                            @click="retomarMissao()" 
+                            v-else >
+                            <v-icon dark>play_arrow</v-icon>&nbsp; 
+                            Retomar Missão
+                        </v-btn>
+                        
+                        <v-btn 
+                            color="primary darken-1" dark 
+                            @click="iniciarMissao()" 
+                            v-if="exibeBotaoStatusBotao != 5" 
+                            :disabled="statusBotao">
+                            <v-icon>power_settings_new</v-icon>&nbsp; 
+                            {{ retornaNomeBontaoStatusMissao() }}
+                        </v-btn>
                         
                     </v-card-actions>
                 </v-card>
@@ -503,6 +524,7 @@ export default {
             listaMissoesUsuarioMedia: [],
             listaMissoesUsuarioDificil: [],
             listaMissoesUsuarioMuitoDificil: [],
+            exibeBotaoStatusBotao: 0,
             descricao_completa: '',
             missoesAbas: [
                 { aba: 'Em Aberto', status: 1 , tamanho: 0},
@@ -671,6 +693,9 @@ export default {
         },
 
         retornaNomeBontaoStatusMissao() {
+
+            this.exibeBotaoStatusBotao = this.usuarioMissao.cd_missao_status
+            
             let nomeBotao = ""
 
             switch (this.usuarioMissao.cd_missao_status) {
@@ -680,6 +705,7 @@ export default {
                 
                 case 2:
                 case 3:
+                    this.statusBotao = false
                     nomeBotao = "Enviar para Análise"
                     break
 
@@ -698,6 +724,7 @@ export default {
                     if (this.$store.state.grupo.cd_grupo == 1) {
 
                         this.statusBotao = false
+                        nomeBotao = "Em Análise"
                     }    
                     break
 
@@ -738,7 +765,47 @@ export default {
 
         pausarMissao() {
 
+            inicioService.pausarMissao(this.usuarioMissao.cd_usuario_missao).then(
+                (response) => {
 
+                    if (response.data.cd_usuario_missao > 0) {
+
+                        this.carregaMissoesUsuario()
+                        this.dialog = false
+
+                    } else {
+
+                        //EXIBIR MENSAGEM DE ERRO
+                    }
+                    
+                }
+            ).catch((error) => {
+
+                //EXIBIR MENSAGEM DE ERRO
+            })
+
+        },
+
+        retomarMissao() {
+
+            inicioService.retomarMissao(this.usuarioMissao.cd_usuario_missao).then(
+                (response) => {
+
+                    if (response.data.cd_usuario_missao > 0) {
+
+                        this.carregaMissoesUsuario()
+                        this.dialog = false
+
+                    } else {
+
+                        //EXIBIR MENSAGEM DE ERRO
+                    }
+                    
+                }
+            ).catch((error) => {
+
+                //EXIBIR MENSAGEM DE ERRO
+            })
 
         }
 
