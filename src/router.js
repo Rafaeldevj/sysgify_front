@@ -6,11 +6,13 @@ import Login from './components/Login.vue'
 import Dashboard from './components/Dashboard.vue'
 import Inicio from './components/Inicio.vue'
 import Perfil from './components/Perfil.vue'
+import AnaliseMissoes from './components/analise/AnalisarMissoes.vue'
 
 //componentes da gamificação
 import Gamificacao from './components/gamificacao/GamificacaoInicio.vue'
 import MissaoCadastro from './components/gamificacao/missao/MissaoCadastro.vue'
 import MissaoListagem from './components/gamificacao/missao/MissaoListagem.vue'
+import Ranking from './components/gamificacao/ranking/Ranking.vue'
 
 //componentes da administração
 import Administracao from './components/administracao/AdministracaoInicio.vue'
@@ -55,6 +57,10 @@ export default new Router({
                     component: UsuarioCadastro
                 },
                 {
+                    path: 'analise_missoes',
+                    component: AnaliseMissoes
+                },
+                {
                     path: 'gamificacao',
                     component: Gamificacao
                 },
@@ -69,7 +75,11 @@ export default new Router({
                 {
                     path: 'missao_cadastro/:id',
                     component: MissaoCadastro
-                }
+                },
+                {
+                    path: 'ranking',
+                    component: Ranking
+                },
             ]
         },
     ]

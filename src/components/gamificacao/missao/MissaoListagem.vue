@@ -369,22 +369,35 @@
                 <div class="headline text-xs-center pa-5">
 
                     <div v-if="bottomNav == 1">
-                        
-                        <v-flex xs8 sm12>
-                            <v-autocomplete
-                                :items="listaUsuarios"
-                                :filter="customFilter"
-                                v-model="usuario"
-                                item-text="nome"
-                                item-value="id"
-                                :auto-select-first="true"
-                                label="Usuário"
-                            ></v-autocomplete>
-                        </v-flex>
+                        <v-layout row wrap>
+                            <v-flex xs5 sm12 md6 >
+                                <v-autocomplete
+                                    :items="listaUsuarios"
+                                    :filter="customFilter"
+                                    v-model="usuario"
+                                    item-text="nome"
+                                    item-value="id"
+                                    :auto-select-first="true"
+                                    label="Usuário"
+                                    class="ma-1"
+                                ></v-autocomplete>
+                            </v-flex>
 
-                        <v-flex xs4 sm12>
-                            <v-btn color="primary" @click="delegarMissaoUsuario"> <v-icon>send</v-icon>&nbsp;Delegar</v-btn>
-                        </v-flex>
+                            <v-flex xs12 xs5 md6 >
+                                <v-text-field
+                                    label="Prazo"
+                                    type="datetime-local"
+                                    v-model="dt_prazo"
+                                    class="ma-1"
+                                ></v-text-field>
+                            </v-flex>
+                            <v-layout row wrap class="text-xs-center">
+                                <v-flex xs4 sm12 md12>
+                                    <v-btn color="primary" @click="delegarMissaoUsuario"> <v-icon>send</v-icon>&nbsp;Delegar</v-btn>
+                                </v-flex>
+                            </v-layout>
+                            
+                        </v-layout>
 
                     </div>
 
@@ -487,6 +500,7 @@ export default {
             listaMissoes: [],
             missoes: [],
             usuario: '',
+            dt_prazo: '',
             usuarios: [],
             descricao_completa: '',
             dadosMissao: {
@@ -550,31 +564,33 @@ export default {
 
             const usuarioMissao = {
                 cd_usuario: this.usuario,
-                cd_missao: this.dadosMissao.missao.cd_missao
-                
+                cd_missao: this.dadosMissao.missao.cd_missao,
+                dt_prazo: this.dt_prazo,
+                cd_usuario_chefe: this.$store.state.usuario.cd_usuario
             }
 
-            if(this.usuario == "") {
+            if(this.usuario == "" || this.dt_prazo == "") {
 
                 //ENVIAR MENSAGEM DE ERRO E NÃO DEIXAR DELEGAR A MISSÃO
-                this.setLoader('red', 'Selecione um usuário', false)
+                this.setLoader('red', 'Selecione um usuário e um prazo', false)
 
             } else {
 
                 missaoService.delegarMissaoUsuario(usuarioMissao).then(
                     (response) => {
-                        if (response.status == 200) {
 
-                            this.setLoader('green', 'Missão Delegada com Sucesso!', false)
+                        if (response.data.cod == 2) {
 
+                            this.setLoader('red', response.data.msg, false)
                         } else {
-
-                            this.setLoader('red', 'Falha ao Delegar Missão!', false)
-
+                            this.setLoader('green', response.data.msg, false)
                         }
+                        
                     }
                 ).catch((error) => {
                     
+                    this.setLoader('red', 'Falha ao Delegar Missaão!', false)
+
                 }).finally(() => {
                     this.delegarMissao = false
                     this.dialog = false

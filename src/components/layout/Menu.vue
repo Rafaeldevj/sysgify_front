@@ -81,6 +81,7 @@ export default {
                 { caminho: '/dashboard/perfil', icone: 'person', nome: 'Perfil' },
                 { caminho: '/dashboard/admin', icone: 'account_balance', nome: 'Administração' },
                 { caminho: '/dashboard/gamificacao', icone: 'games', nome: 'Gamificação' },
+                { caminho: '/dashboard/analise_missoes', icone: 'description', nome: 'Analisar Missões' },
                 { caminho: '/dashboard', icone: 'history', nome: 'Histórico' },
                 { caminho: '/login', icone: 'input', nome: 'Sair' }
             ]

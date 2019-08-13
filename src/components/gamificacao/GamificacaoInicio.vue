@@ -50,7 +50,7 @@ export default {
                 //{ nome: 'Pontos', descricao: 'Pontos para os usuários' , imagem: './images/coin.png' , rota: '/dashboard/gamificacao'},
                 { nome: 'Medalhas', descricao: 'Medalhas para os usuários' , imagem: './images/medal.png' , rota: '/gamificacao'},
                 //{ nome: 'Níveis', descricao: 'Níveis para os usuários' , imagem: './images/level.png' , rota: '/gamificacao'},
-                { nome: 'Ranking', descricao: 'Ranking para os usuários' , imagem: './images/podium.png' , rota: '/gamificacao'},
+                { nome: 'Ranking', descricao: 'Ranking para os usuários' , imagem: './images/podium.png' , rota: '/dashboard/ranking'},
                 { nome: 'Missões', descricao: 'Missões para os usuários' , imagem: './images/win.png' , rota: '/dashboard/missao_listagem'},
                 { nome: 'Troféus', descricao: 'Troféus para os usuários' , imagem: './images/award.png' , rota: '/gamificacao'},
                 { nome: 'Loja', descricao: 'Loja para os usuários' , imagem: './images/cart.png' , rota: '/gamificacao'},

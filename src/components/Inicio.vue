@@ -72,7 +72,10 @@
                                                             {{ missaoFacil.missao.cd_missao_prioridade.nm_missao_prioridade }}
                                                         </div>
                                                         <div class="white--text">
-                                                            {{ missaoFacil.dt_cadastro }}
+                                                            Delegado: {{ missaoFacil.dt_cadastro }}
+                                                        </div>
+                                                        <div class="white--text">
+                                                            Prazo: {{ missaoFacil.dt_prazo }}
                                                         </div>
                                                     </v-card-text>
 
@@ -127,12 +130,15 @@
                                                             {{ missaoMedia.missao.cd_missao_prioridade.nm_missao_prioridade }}
                                                         </div>
                                                         <div class="white--text">
-                                                            {{ missaoMedia.dt_cadastro }}
+                                                            Delegado: {{ missaoMedia.dt_cadastro }}
+                                                        </div>
+                                                        <div class="white--text">
+                                                            Prazo: {{ missaoMedia.dt_prazo }}
                                                         </div>
                                                     </v-card-text>
                                                     <div class="text-xs-center">
                                                         <v-card-actions>
-                                                            <v-btn block color="warning" style="color: white" @click="infoMissao(missaoMedia.missao.cd_missao)">
+                                                            <v-btn block color="warning" style="color: white" @click="infoMissao(missaoMedia)">
                                                                 <span>Acessar</span>
                                                             </v-btn>
                                                         </v-card-actions>
@@ -179,12 +185,15 @@
                                                             {{ missaoDificil.missao.cd_missao_prioridade.nm_missao_prioridade }}
                                                         </div>
                                                         <div class="white--text">
-                                                            {{ missaoDificil.dt_cadastro }}
+                                                            Delegado: {{ missaoDificil.dt_cadastro }}
+                                                        </div>
+                                                        <div class="white--text">
+                                                            Prazo: {{ missaoDificil.dt_prazo }}
                                                         </div>
                                                     </v-card-text>
                                                     <div class="text-xs-center">
                                                         <v-card-actions>
-                                                            <v-btn block color="red" style="color: white" @click="infoMissao(missaoDificil.missao.cd_missao)">
+                                                            <v-btn block color="red" style="color: white" @click="infoMissao(missaoDificil)">
                                                                 <span>Acessar</span>
                                                             </v-btn>
                                                         </v-card-actions>
@@ -231,12 +240,15 @@
                                                             {{ missaoMuitoDificil.missao.cd_missao_prioridade.nm_missao_prioridade }}
                                                         </div>
                                                         <div class="white--text">
-                                                            {{ missaoMuitoDificil.dt_cadastro }}
+                                                            Delegado: {{ missaoMuitoDificil.dt_cadastro }}
+                                                        </div>
+                                                        <div class="white--text">
+                                                            Prazo: {{ missaoMuitoDificil.dt_prazo }}
                                                         </div>
                                                     </v-card-text>
                                                     <div class="text-xs-center">
                                                         <v-card-actions>
-                                                            <v-btn block color="red accent-4" style="color: white" @click="infoMissao(missaoMuitoDificil.missao.cd_missao)">
+                                                            <v-btn block color="red accent-4" style="color: white" @click="infoMissao(missaoMuitoDificil)">
                                                                 <span>Acessar</span>
                                                             </v-btn>
                                                         </v-card-actions>
@@ -448,7 +460,7 @@
 
                         <v-btn color="yellow darken-1" dark 
                             @click="retomarMissao()" 
-                            v-else >
+                            v-else-if="this.$store.state.grupo.cd_grupo == 1">
                             <v-icon dark>play_arrow</v-icon>&nbsp; 
                             Retomar Missão
                         </v-btn>
@@ -675,7 +687,7 @@ export default {
                             } 
 
                             if (response.data[i].missao.cd_missao_dificuldade == 3) {
-                                this.listaMissoesUsuarioDificil = this.listaMissoesUsuarioDificil.concat(respo+nse.data[i])
+                                this.listaMissoesUsuarioDificil = this.listaMissoesUsuarioDificil.concat(response.data[i])
                             } 
 
                             if (response.data[i].missao.cd_missao_dificuldade == 4) {
@@ -705,7 +717,6 @@ export default {
                 
                 case 2:
                 case 3:
-                    this.statusBotao = false
                     nomeBotao = "Enviar para Análise"
                     break
 
@@ -723,8 +734,8 @@ export default {
                 case 5:
                     if (this.$store.state.grupo.cd_grupo == 1) {
 
-                        this.statusBotao = false
-                        nomeBotao = "Em Análise"
+                        nomeBotao = "Pausada"
+                        this.statusBotao = true
                     }    
                     break
 
@@ -793,6 +804,8 @@ export default {
 
                     if (response.data.cd_usuario_missao > 0) {
 
+                        this.exibeBotaoStatusBotao = 3
+
                         this.carregaMissoesUsuario()
                         this.dialog = false
 
@@ -807,6 +820,7 @@ export default {
                 //EXIBIR MENSAGEM DE ERRO
             })
 
+            console.log(this.exibeBotaoStatusBotao)
         }
 
     },
