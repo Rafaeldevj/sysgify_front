@@ -12,12 +12,13 @@
                 <v-list class="pa-0">
                 <v-list-tile avatar>
                     <v-list-tile-avatar>
-                        <img src="../../assets/images/profile/man.png">
+                        <img v-if="$store.state.usuario.img_foto != null" :src="$store.state.usuario.img_foto">
+                        <img v-else src="../../assets/images/profile/man.png">
                     </v-list-tile-avatar>
 
                     <v-list-tile-content>
                         <v-list-tile-title>
-                            {{ this.$store.state.usuario.nm_usuario }}
+                            {{ this.$store.state.usuario.nm_apelido }}
                         </v-list-tile-title>
                         <v-list-tile-sub-title>
                             <strong>Nível: {{ this.$store.state.usuario.nu_nivel }}</strong>

@@ -132,7 +132,6 @@ export default {
                 }
             ).catch(
                 (error) => {
-                    console.log(error)
                     
                     if(error) {
                         setTimeout(() => {

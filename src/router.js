@@ -6,6 +6,7 @@ import Login from './components/Login.vue'
 import Dashboard from './components/Dashboard.vue'
 import Inicio from './components/Inicio.vue'
 import Perfil from './components/Perfil.vue'
+import PerfilEdicao from "./components/PerfilEdicao"
 import AnaliseMissoes from './components/analise/AnalisarMissoes.vue'
 
 //componentes da gamificação
@@ -43,6 +44,10 @@ export default new Router({
                 {
                     path: 'perfil',
                     component: Perfil
+                },
+                {
+                    path: 'perfil_edicao',
+                    component: PerfilEdicao
                 },
                 {
                     path: 'admin',

@@ -75,7 +75,16 @@
                                         ></v-text-field>
                                     </v-flex>
 
-                                    <v-flex xs12 md3>
+                                    <v-flex xs12 md6>
+                                        <v-text-field
+                                                v-model="usuario.nm_apelido"
+                                                type="text"
+                                                label="Apelido do Usuário"
+                                                required
+                                        ></v-text-field>
+                                    </v-flex>
+
+                                    <v-flex xs12 md6>
                                         <v-switch
                                             v-model="usuario.fl_ativo"
                                             color="primary"
@@ -84,6 +93,15 @@
                                     </v-flex>
 
                                 </v-layout>
+
+                                <v-layout row wrap>
+                                    <v-flex xs12 md3>
+                                        <v-btn color="primary" @click="selecionarImagem">Selecione uma Imagem</v-btn>
+                                        <input v-show="false" ref="inputUpload" type="file" @change="onFilePicked">
+                                        <img :src="imageURL" height="150">
+                                    </v-flex>
+                                </v-layout>
+
                                 <h2>Grupos</h2>
                                 <br>
                                 <v-divider></v-divider>
@@ -155,6 +173,7 @@ export default {
             cor_nome_login: 'primary',
             show1: false,
             checkbox: true,
+            imageURL: '',
             usuario: {
                 cd_usuario: '',
                 nm_usuario: '',
@@ -163,12 +182,15 @@ export default {
                 nm_senha: '',
                 fl_ativo: true,
                 grupos: [],
+                nm_apelido: '',
+                img_foto: ''
             },
             listaLogins: [],
             listaGrupos: []
         }
     },
     computed: {
+
         exibeAtividadeUsuario() {
 
             this.status_switch = this.usuario.fl_ativo ? 'Usuário Ativo' : 'Usuário Inativo'
@@ -225,12 +247,14 @@ export default {
 
         salvarUsuario() {
 
+            this.usuario.img_foto = this.imageURL
+
             this.dialog = true
 
             if(this.permitido_salvar) {
-                
+
                 this.usuario.fl_ativo = this.usuario.fl_ativo ? 'S' : 'N'
-            
+
                 usuarioService.salvar(this.usuario).then(
                     (response) => {
 
@@ -240,7 +264,7 @@ export default {
                                 this.dialog = false
 
                                 this.setLoader('success', 'Usuário salvo com sucesso!', false)
-                                
+
 
                                 setTimeout(() => {
                                     this.$router.push('/dashboard/usuario_listagem')
@@ -248,24 +272,27 @@ export default {
                                 }, 1000)
 
                             }, 1500)
-                        
+
                         } else {
 
                             setTimeout(() => {
                                 this.dialog = false
 
                                 this.setLoader('error', 'Falha ao salvar usuário!', false)
-                                
+
                             }, 1500)
 
                         }
-                    
+
                     }
                 )
 
-            } 
+            }
             else {
-                alert('O nome de login deve ser único')
+
+                this.dialog = false
+
+                this.setLoader('error', 'Login indisponível!', false)
             }
 
             
@@ -298,6 +325,22 @@ export default {
         navegar(pagina) {
             this.$router.push(pagina)
         },
+
+        selecionarImagem() {
+
+            this.$refs.inputUpload.click()
+        },
+
+        onFilePicked(event) {
+            let imagem = event.target.files[0];
+            let reader = new FileReader();
+            reader.readAsDataURL(imagem);
+            reader.onload = e => {
+
+                this.imageURL = e.target.result;
+
+            }
+        }
 
     },
     mounted() {

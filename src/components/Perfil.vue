@@ -20,7 +20,8 @@
                     <div v-if="!carregando" class="dados">
                         <v-responsive class="pt-4">
                             <v-avatar size="80">
-                                <img :src="img_usuario">
+                                <img v-if="$store.state.usuario.img_foto != null" :src="$store.state.usuario.img_foto">
+                                <img v-else :src="img_usuario">
                             </v-avatar>
                         </v-responsive>
                         
@@ -151,8 +152,12 @@
                                     </v-list-tile-content>
                                 </v-list-tile>
                             </v-list>
-                                                
+                            <v-divider></v-divider>
                         </v-card-text>
+
+                        <v-card-actions>
+                            <v-btn block color="primary" @click="navegar('perfil_edicao')">Editar Informações</v-btn>
+                        </v-card-actions>
                     </div>
                     <div class="text-xs-center" v-else>
                         <Loader />
@@ -254,7 +259,11 @@ export default {
                 return "";
             }
 
-        }
+        },
+
+        navegar(pagina) {
+            this.$router.push(pagina)
+        },
 
     },
     mounted() {

@@ -14,7 +14,9 @@ export default new Vuex.Store({
             nu_moedas: null,
             nu_experiencia: null,
             nu_nivel: null,
-            dt_cadastro: null
+            dt_cadastro: null,
+            nm_apelido: null,
+            img_foto: null
         },
         grupo: {
             cd_grupo: null,
