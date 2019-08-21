@@ -123,7 +123,7 @@ export default {
             permitido_salvar: true,
             dialog: false,
             listaGrupos: [],
-            itensPagina: 3,
+            itensPagina: 2,
             pagina: 1,
             totalPaginas: 1,
             grupo: {

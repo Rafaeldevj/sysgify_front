@@ -50,7 +50,7 @@
 
                                 <div class="text-xs-center">
                                     <v-card-actions>
-                                        <v-btn block color="teal" style="color: white">
+                                        <v-btn block color="teal" style="color: white" @click="infoEquipe(equipeL)">
                                             <span>Acessar</span>
                                         </v-btn>
                                     </v-card-actions>
@@ -80,7 +80,7 @@
 
         <v-layout row justify-center>
             <v-dialog v-model="dialog" persistent max-width="600px">
-                <form @submit.prevent="">
+                <form @submit.prevent="salvarEquipe">
                     <v-card>
                         <v-card-title>
                             <span class="headline">Nova Equipe</span>
@@ -115,6 +115,87 @@
 
 
         <LoaderSave :texto="textoLoarder" :dialog="dialogLoader" :cor="corLoader" :barra="barraLoader"></LoaderSave>
+
+
+        <v-layout row justify-center>
+            <v-dialog v-model="dialogInfo" persistent max-width="800px">
+
+                <v-card>
+                    <v-card-title>
+                        <span class="headline">Equipe {{ equipeInfo.nm_equipe }}</span>
+                    </v-card-title>
+                    <v-divider></v-divider>
+                    <v-card-text>
+                        <v-layout row wrap>
+
+                            <v-flex grow pa-1 md12 xs12 class="text-xs-center">
+                                <v-layout row wrap>
+                                    <v-flex grow pa-1 md12 x12>
+                                        <h1>Membros</h1>
+                                    </v-flex>
+                                </v-layout>
+
+                                <v-layout row wrap>
+                                    <v-flex md12 x12>
+
+                                        <v-card flat class="text-xs-center ma-3" elevation="5" dark>
+
+                                            <template v-for="(item, index) in equipeLista">
+
+                                                <v-list-tile
+                                                        :key="item.index"
+                                                        avatar
+                                                >
+                                                    <v-list-tile-avatar>
+                                                        <img v-if="item.foto != null" :src="item.foto">
+                                                        <img v-else src="../../../assets/images/profile/man.png">
+                                                    </v-list-tile-avatar>
+
+                                                    <v-list-tile-content>
+                                                        <v-list-tile-title>{{ item.nm_equipe }}</v-list-tile-title>
+                                                        <v-list-tile-sub-title>Pontos: {{ item.fl_ativo }} </v-list-tile-sub-title>
+                                                    </v-list-tile-content>
+
+                                                    <!--
+                                                    <v-list-tile-action>
+
+                                                        <h1 v-if="item.posicao == 1" style="color: #FFC107">{{ item.posicao }}º</h1>
+                                                        <h1 v-else-if="item.posicao == 2" style="color: grey">{{ item.posicao }}º</h1>
+                                                        <h1 v-else-if="item.posicao == 3" style="color: #cd7f32">{{ item.posicao }}º</h1>
+                                                        <h1 v-else>{{ item.posicao }}º</h1>
+
+                                                    </v-list-tile-action>
+                                                    -->
+                                                </v-list-tile>
+
+                                                <v-divider
+                                                        :key="index"
+                                                        :inset="true"
+                                                ></v-divider>
+                                            </template>
+
+                                        </v-card>
+
+                                    </v-flex>
+
+                                </v-layout>
+                            </v-flex>
+
+                        </v-layout>
+                        <v-divider></v-divider>
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-btn color="blue darken-1" flat @click="dialogInfo = false">Fechar</v-btn>
+                        <v-spacer></v-spacer>
+                        <v-btn color="blue darken-1" flat>
+                            Novo Membro
+                        </v-btn>
+                    </v-card-actions>
+                </v-card>
+
+            </v-dialog>
+        </v-layout>
+
     </div>
 </template>
 
@@ -133,6 +214,7 @@ export default {
             textoLoarder: 'Carregando Equipes',
             barraLoader: true,
             dialog: false,
+            dialogInfo: false,
             itensPagina: 3,
             pagina: 1,
             totalPaginas: 1,
@@ -141,6 +223,11 @@ export default {
                 cd_equipe: '',
                 nm_equipe: '',
                 fl_ativo: 'S'
+            },
+            equipeInfo: {
+                cd_equipe: '',
+                nm_equipe: '',
+                fl_ativo: ''
             }
         }
     },
@@ -159,18 +246,66 @@ export default {
         },
 
         carregaEquipes() {
-
+            this.dialogLoader = true
             equipeService.getEquipes().then(
                 response => {
                     this.equipeLista = response.data
+
+                    this.dialogLoader = false
                 }
             )
 
         },
 
+        infoEquipe(equipeInfo) {
+
+            this.dialogInfo = true
+            this.equipeInfo = equipeInfo
+
+        },
+
         novaEquipe() {
 
+            this.limparEquipe()
+
             this.dialog = true
+        },
+
+        limparEquipe() {
+
+            this.equipe.cd_equipe = ''
+            this.equipe.nm_equipe = ''
+            this.equipe.fl_ativo = 'S'
+
+        },
+
+        salvarEquipe() {
+
+            equipeService.salvar(this.equipe).then(
+                response => {
+
+                    if (response.data.cd_equipe > 0) {
+
+                        this.setLoader('success', 'Equipe salva com sucesso!', false)
+                        this.carregaEquipes()
+                        this.dialog = false
+                        this.limparEquipe()
+
+                    } else {
+                        this.setLoader('error', 'Falha ao salvar equipe!', false)
+                        this.dialog = false
+                        this.limparEquipe()
+                    }
+
+                }
+            ).catch(
+                () => {
+                    this.setLoader('error', 'Falha no servidor!', false)
+                    this.dialog = false
+                    this.limparEquipe()
+                }
+            )
+
         }
 
     },

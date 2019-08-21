@@ -11,4 +11,9 @@ export default {
 
         return http.get(`/equipe/paginacao/${itens}?page=${pagina}`)
     },
+
+    salvar(equipe) {
+
+        return http.post('/equipe', equipe)
+    }
 }
