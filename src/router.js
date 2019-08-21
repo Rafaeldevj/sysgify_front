@@ -19,6 +19,7 @@ import Ranking from './components/gamificacao/ranking/Ranking.vue'
 import Administracao from './components/administracao/AdministracaoInicio.vue'
 import UsuarioListagem from './components/administracao/usuario/UsuarioListagem.vue'
 import UsuarioCadastro from './components/administracao/usuario/UsuarioCadastro.vue'
+import GrupoListagem from "./components/administracao/grupo/GrupoListagem";
 
 Vue.use(Router)
 
@@ -60,6 +61,10 @@ export default new Router({
                 {
                     path: 'usuario_cadastro',
                     component: UsuarioCadastro
+                },
+                {
+                    path: 'grupo_listagem',
+                    component: GrupoListagem
                 },
                 {
                     path: 'analise_missoes',

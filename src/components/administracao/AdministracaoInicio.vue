@@ -45,7 +45,7 @@ export default {
             modoCards: false,
             gamification:[
                 { nome: 'Usuários' , icone: 'person' , rota: '/dashboard/usuario_listagem'},
-                { nome: 'Grupos' , icone: 'group' , rota: '/dashboard/admin'},
+                { nome: 'Grupos' , icone: 'group' , rota: '/dashboard/grupo_listagem'},
             ]
 
         }
