@@ -54,7 +54,7 @@ export default {
                 { nome: 'Missões', descricao: 'Missões para os usuários' , imagem: './images/win.png' , rota: '/dashboard/missao_listagem'},
                 { nome: 'Troféus', descricao: 'Troféus para os usuários' , imagem: './images/award.png' , rota: '/gamificacao'},
                 { nome: 'Loja', descricao: 'Loja para os usuários' , imagem: './images/cart.png' , rota: '/gamificacao'},
-                { nome: 'Equipes', descricao: 'Equipes compostas por usuários' , imagem: './images/team.png' , rota: '/dashboard/gamificacao'}
+                { nome: 'Equipes', descricao: 'Equipes compostas por usuários' , imagem: './images/team.png' , rota: '/dashboard/equipes'}
             ]
 
         }
