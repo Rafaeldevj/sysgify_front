@@ -10,6 +10,11 @@ export default {
     ativarDesativarUsuario(id) {
 
         return http.post('/usuario/ativar', id)
+    },
+
+    getUsuariosCombo() {
+
+        return http.get('/usuario/nomes')
     }
 
 }

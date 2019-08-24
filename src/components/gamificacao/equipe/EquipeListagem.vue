@@ -88,11 +88,11 @@
                         <v-card-text>
                             <v-container>
                                 <v-layout>
-                                    <v-flex xs10 md8>
+                                    <v-flex xs8 md8>
                                         <v-text-field label="Nome da equipe" required  v-model="equipe.nm_equipe"/>
                                     </v-flex>
                                     &nbsp;&nbsp;&nbsp;
-                                    <v-flex xs2 md4>
+                                    <v-flex xs4 md4>
                                         <v-checkbox
                                             color="indigo"
                                             label="Equipe Ativa"
@@ -138,9 +138,9 @@
                                 <v-layout row wrap>
                                     <v-flex md12 x12>
 
-                                        <v-card flat class="text-xs-center ma-3" elevation="5" dark>
+                                        <v-card flat class="text-xs-center ma-3" elevation="5" dark v-if="membrosLista.length > 0">
 
-                                            <template v-for="(item, index) in equipeLista">
+                                            <template v-for="(item, index) in membrosLista">
 
                                                 <v-list-tile
                                                         :key="item.index"
@@ -152,20 +152,25 @@
                                                     </v-list-tile-avatar>
 
                                                     <v-list-tile-content>
-                                                        <v-list-tile-title>{{ item.nm_equipe }}</v-list-tile-title>
-                                                        <v-list-tile-sub-title>Pontos: {{ item.fl_ativo }} </v-list-tile-sub-title>
+                                                        <v-list-tile-title>{{ item.nm_apelido }}</v-list-tile-title>
+                                                        <!--<v-list-tile-sub-title>Pontos: {{ item.fl_ativo }} </v-list-tile-sub-title>-->
                                                     </v-list-tile-content>
 
-                                                    <!--
                                                     <v-list-tile-action>
 
-                                                        <h1 v-if="item.posicao == 1" style="color: #FFC107">{{ item.posicao }}º</h1>
-                                                        <h1 v-else-if="item.posicao == 2" style="color: grey">{{ item.posicao }}º</h1>
-                                                        <h1 v-else-if="item.posicao == 3" style="color: #cd7f32">{{ item.posicao }}º</h1>
-                                                        <h1 v-else>{{ item.posicao }}º</h1>
+                                                        <v-btn
+                                                            small
+                                                            color="red"
+                                                            dark
+                                                            flat
+                                                            v-if="$store.state.grupo.cd_grupo == 1"
+                                                            @click="openRemoverMembro(item)">
+                                                            <v-icon small >clear</v-icon>
+                                                            Remover
+                                                        </v-btn>
 
                                                     </v-list-tile-action>
-                                                    -->
+
                                                 </v-list-tile>
 
                                                 <v-divider
@@ -175,6 +180,9 @@
                                             </template>
 
                                         </v-card>
+                                        <div v-else class="text-xs-center">
+                                            <h3>Nenhum membro nesta equipe</h3>
+                                        </div>
 
                                     </v-flex>
 
@@ -187,12 +195,72 @@
                     <v-card-actions>
                         <v-btn color="blue darken-1" flat @click="dialogInfo = false">Fechar</v-btn>
                         <v-spacer></v-spacer>
-                        <v-btn color="blue darken-1" flat>
+                        <v-btn color="blue darken-1" flat @click="novoMembro">
                             Novo Membro
                         </v-btn>
                     </v-card-actions>
                 </v-card>
 
+            </v-dialog>
+        </v-layout>
+
+
+        <v-layout row justify-center>
+            <v-dialog v-model="dialogAddMembro" persistent max-width="800px">
+                <v-card>
+                    <v-card-title>
+                        <span class="headline">Adicionar membros na equipe: {{ equipeInfo.nm_equipe }}</span>
+                    </v-card-title>
+
+                    <v-card-text>
+
+                        <v-container>
+                            <v-layout>
+                                <v-flex xs12 m12>
+
+                                    <v-select
+                                            v-model="membros"
+                                            :items="usuariosLista"
+                                            item-text="nm_usuario"
+                                            item-value="cd_usuario"
+                                            label="Selecione os membros"
+                                            multiple
+                                            chips
+                                            hint="Membros para a equipe."
+                                            persistent-hint
+                                    >
+                                    </v-select>
+
+                                </v-flex>
+                            </v-layout>
+                        </v-container>
+
+                    </v-card-text>
+
+                    <v-card-actions>
+                        <v-btn color="blue darken-1" flat @click="dialogAddMembro = false">Fechar</v-btn>
+                        <v-spacer></v-spacer>
+                        <v-btn type="button" color="blue darken-1" flat @click="adicionarMembro" >Adicionar</v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
+        </v-layout>
+
+
+        <!-- MODAL PARA REMOVER MEMBRO DA EQUIPE -->
+        <v-layout row justify-center>
+            <v-dialog v-model="dialogRemoveMembro" persistent max-width="600px" class="text-xs-center">
+                <v-card>
+                    <v-card-title>
+                        <span class="headline">Deseja remover <span class="red--text">{{ membroRemovido }}</span> da equipe?</span>
+                    </v-card-title>
+
+                    <v-card-actions>
+                        <v-btn color="blue darken-1" flat @click="dialogRemoveMembro = false">Fechar</v-btn>
+                        <v-spacer></v-spacer>
+                        <v-btn type="button" color="red darken-1" flat @click="removeMembro">Remover</v-btn>
+                    </v-card-actions>
+                </v-card>
             </v-dialog>
         </v-layout>
 
@@ -202,7 +270,9 @@
 <script>
 
 import equipeService from '../../../services/gamificacao/equipeListagem'
+import usuarioService from '../../../services/usuario/usuarioListagem'
 import LoaderSave from "../../loader/LoaderSave"
+
 export default {
     components: {
         LoaderSave
@@ -215,10 +285,14 @@ export default {
             barraLoader: true,
             dialog: false,
             dialogInfo: false,
+            dialogAddMembro: false,
+            dialogRemoveMembro: false,
             itensPagina: 3,
             pagina: 1,
             totalPaginas: 1,
             equipeLista: [],
+            usuariosLista: [],
+            membrosLista: [],
             equipe: {
                 cd_equipe: '',
                 nm_equipe: '',
@@ -228,7 +302,10 @@ export default {
                 cd_equipe: '',
                 nm_equipe: '',
                 fl_ativo: ''
-            }
+            },
+            membros: [],
+            membroRemovido: '',
+            idMembroRemovido: '',
         }
     },
     methods: {
@@ -257,10 +334,23 @@ export default {
 
         },
 
+        carregaUsuariosCombo() {
+
+            equipeService.carregaUsuarios(this.equipeInfo.cd_equipe).then(
+                (response) => {
+
+                    this.usuariosLista = response.data
+                }
+            )
+
+        },
+
         infoEquipe(equipeInfo) {
 
             this.dialogInfo = true
             this.equipeInfo = equipeInfo
+
+            this.carregaMembros(equipeInfo.cd_equipe)
 
         },
 
@@ -269,6 +359,16 @@ export default {
             this.limparEquipe()
 
             this.dialog = true
+        },
+
+        novoMembro() {
+
+            this.dialogAddMembro = true
+
+            this.usuariosLista = []
+
+            this.carregaUsuariosCombo()
+
         },
 
         limparEquipe() {
@@ -303,6 +403,94 @@ export default {
                     this.setLoader('error', 'Falha no servidor!', false)
                     this.dialog = false
                     this.limparEquipe()
+                }
+            )
+
+        },
+
+        adicionarMembro() {
+
+            equipeService.adicinarMembros(this.equipeInfo.cd_equipe, this.membros).then(
+                (response) => {
+
+                    if (response.data != null) {
+                        //exibir mensagem de sucesso
+
+                        this.setLoader('success', 'Membro(s) acidionado(s) com sucesso!', false)
+                        this.dialogAddMembro = false
+                        this.carregaMembros(this.equipeInfo.cd_equipe)
+
+
+                    } else {
+                        //exibir mensagem de falha
+                        this.setLoader('error', 'Falha ao adicionar membro(s)!', false)
+
+                    }
+                }
+            ).catch(() => {
+                this.setLoader('error', 'Falha no servidor!', false)
+            }).finally(() => {
+                this.membros = []
+            })
+
+        },
+
+        carregaMembros(id) {
+
+            this.dialogLoader = true
+            this.corLoader = 'primary'
+            this.textoLoarder = 'Carregando membros'
+            this.barraLoader = true
+
+            equipeService.getMembros(id).then(
+                (response) => {
+                    if (response.data.cod == 2) {
+                        this.membrosLista = []
+                    } else {
+                        this.membrosLista = response.data
+                        this.dialogLoader = false
+                    }
+
+
+                }
+            ).finally(
+                () => {
+                    this.dialogLoader = false
+                }
+            )
+
+        },
+
+        openRemoverMembro(membro) {
+
+            this.dialogRemoveMembro = true
+
+            this.membroRemovido = membro.nm_usuario
+            this.idMembroRemovido = membro.cd_usuario_equipe
+
+        },
+
+        removeMembro() {
+
+            equipeService.removeMember(this.idMembroRemovido).then(
+                (response) => {
+
+                    if (response.data.cod == 1) {
+
+                        this.setLoader('success', response.data.msg , false)
+                        this.carregaMembros(response.data.equipe)
+
+                    } else {
+
+                        this.setLoader('error', response.data.msg , false)
+                    }
+
+                }
+            ).catch(() => {
+                this.setLoader('error', 'Falha no servidor!' , false)
+            }).finally(
+                () => {
+                    this.dialogRemoveMembro = false
                 }
             )
 

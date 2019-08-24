@@ -106,6 +106,7 @@ export default {
         }
     },
     methods: {
+
         logar(){
             this.dialog = true
             loginService.logar(this.usuario).then(
