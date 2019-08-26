@@ -1,17 +1,20 @@
 <template>
-    <v-app>
+    <v-app class="app-login">
+
         <v-content class="content-login">
-            
             <v-layout align-center justify-center row fill-height>
                 <v-flex xs12 pa-2 md4>
-                    <v-card class="text-md-center">
+
+                    <v-card class="text-md-center card-login">
                         <v-toolbar card prominent dark color="primary">
                             <v-container fluid grid-list-xl pa-1>
                                 <v-layout row justify-space-between>
                                     <v-flex xs2>
                                     </v-flex>
                                     <v-flex xs8>
-                                        <v-toolbar-title class="white--text">Login</v-toolbar-title>
+                                        <v-toolbar-title class="white--text">
+                                            <h1 class=" font-weight-black font-italic">Sysgify</h1>
+                                        </v-toolbar-title>
                                     </v-flex>
                                     <v-flex xs2>
                                     </v-flex>
@@ -152,8 +155,17 @@ export default {
 </script>
 
 <style>
-.content-login {
-    
-    background-color: #ececec
-}
+
+    .content-login {
+
+        background-image: url("../assets/images/bg.jpg");
+        position: absolute;
+        top:0px;
+        left: 0px;
+        width:100%;
+        height:100%;
+        z-index:0;
+
+    }
+
 </style>

@@ -85,6 +85,7 @@ export default {
                 { caminho: '/dashboard/analise_missoes', icone: 'description', nome: 'Analisar Missões' },
                 { caminho: '/dashboard', icone: 'history', nome: 'Histórico' },
                 { caminho: '/dashboard/loja', icone: 'shopping_cart', nome: 'Loja' },
+                { caminho: '/dashboard/loja', icone: 'shopping_basket', nome: 'Meus Itens' },
                 { caminho: '/login', icone: 'input', nome: 'Sair' }
             ]
         }

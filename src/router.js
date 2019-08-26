@@ -16,6 +16,7 @@ import MissaoListagem from './components/gamificacao/missao/MissaoListagem.vue'
 import Ranking from './components/gamificacao/ranking/Ranking.vue'
 import EquipeListagem from "./components/gamificacao/equipe/EquipeListagem";
 import ItensListagem from "./components/gamificacao/loja/ItensListagem";
+import ItensCadastro from "./components/gamificacao/loja/ItensCadastro";
 
 //componentes da administração
 import Administracao from './components/administracao/AdministracaoInicio.vue'
@@ -99,6 +100,14 @@ export default new Router({
                 {
                     path: 'loja',
                     component: ItensListagem
+                },
+                {
+                    path: 'item',
+                    component: ItensCadastro
+                },
+                {
+                    path: 'item/:id',
+                    component: ItensCadastro
                 },
             ]
         },

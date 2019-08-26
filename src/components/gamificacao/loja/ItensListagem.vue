@@ -1,8 +1,21 @@
 <template>
     <div>
         <v-layout row wrap>
-            <v-flex grow pa-1>
+            <v-flex grow pa-1 md8 xs12>
                 <h1>Loja da Aplicação</h1>
+            </v-flex>
+            <v-spacer></v-spacer>
+            <v-flex pa-1 md4 x12>
+                <div style="float: right" v-if="!btnBlock">
+                    <v-btn :block="btnBlock" dark color="indigo" @click="navegar('item')">
+                        <v-icon>add</v-icon>Novo Item
+                    </v-btn>
+                </div>
+                <div v-else>
+                    <v-btn :block="btnBlock" dark color="indigo" @click="navegar('item')">
+                        <v-icon>add</v-icon>Novo Item
+                    </v-btn>
+                </div>
             </v-flex>
         </v-layout>
 
@@ -65,6 +78,7 @@
 
         <v-dialog
                 v-model="dialog"
+                persistent
                 width="600"
         >
             <v-card dark>
@@ -74,8 +88,31 @@
                 </v-card-text>
                 <v-divider></v-divider>
                 <v-card-text>
-                    <h2>Item: {{ itemSelecionado.nm_item }}</h2>
+                    <v-layout>
+                        <v-flex xs5>
+                            <v-img
+                                    src="https://cdn.vuetifyjs.com/images/cards/foster.jpg"
+                                    height="125px"
+                                    contain
+                            ></v-img>
+                        </v-flex>
+                        <v-flex xs7>
+                            <v-card-title primary-title>
+                                <div>
+                                    <div class="headline">Item: {{ itemSelecionado.nm_item }}</div>
+                                    <div class="headline">Valor: <span class="yellow--text">{{ itemSelecionado.nu_valor }} moedas</span></div>
+                                    <div class="headline" v-if="itemSelecionado.fl_disponivel == 'S'"><span class="green--text">Disponível</span></div>
+                                    <div class="headline" v-else>: <span class="red--text">Indisponível</span></div>
+
+                                </div>
+                            </v-card-title>
+                        </v-flex>
+                    </v-layout>
+                    <br>
+                    <div><strong>Descrição:</strong> {{ itemSelecionado.ds_descricao }}</div>
                 </v-card-text>
+
+
 
                 <v-card-actions>
                     <v-btn
@@ -85,6 +122,11 @@
                     >
                         Fechar
                     </v-btn>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                        color="success"
+                        @click="comprarItem(itemSelecionado)"
+                        flat>Comprar</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
@@ -116,14 +158,33 @@ export default {
         }
     },
 
+    computed: {
+
+        btnBlock() {
+
+            let btnBlock = false
+
+            if (this.$vuetify.breakpoint.xs) {
+
+                btnBlock = true
+            }
+
+            return btnBlock
+        }
+
+    },
+
     methods: {
+
+        navegar(pagina) {
+            this.$router.push(pagina)
+        },
 
         recuperaItensLoja() {
 
             lojaService.getItensLoja().then(
                 (response) => {
                     this.listaItensLoja = response.data
-                    console.log(response.data)
                 }
             )
 
@@ -132,6 +193,19 @@ export default {
         acessarItem(item) {
             this.dialog = true
             this.itemSelecionado = item
+        },
+
+        comprarItem(item) {
+
+            if (item.nu_valor > this.$store.state.usuario.nu_moedas) {
+
+                alert('Moedas insuficientes!');
+
+            } else {
+
+                alert('Compra realizada!');
+            }
+
         }
 
     },
