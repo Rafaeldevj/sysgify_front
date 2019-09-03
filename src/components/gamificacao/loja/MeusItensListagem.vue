@@ -42,11 +42,18 @@
                                         </v-btn>
                                     </v-card-actions>
 
-                                    <v-card-text class="text-xs-center" v-else style="margin-top: -3px">
+                                    <v-card-text class="text-xs-center" v-else-if="item.utilizado == 3" style="margin-top: -3px">
                                         <div class="subheading blue--text">
                                             Item em análise
                                         </div>
                                     </v-card-text>
+
+                                    <v-card-text class="text-xs-center" v-else style="margin-top: -3px">
+                                        <div class="subheading green--text">
+                                            Item permitido para uso
+                                        </div>
+                                    </v-card-text>
+
                                 </div>
                             </v-card>
 

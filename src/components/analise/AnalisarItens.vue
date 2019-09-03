@@ -91,8 +91,6 @@
                     <div><strong>Descrição:</strong> {{ itemSelecionado.ds_descricao }}</div>
                 </v-card-text>
 
-
-
                 <v-card-actions>
                     <v-btn
                             color="red"
@@ -106,6 +104,7 @@
 
                     <v-btn
                             color="success"
+                            @click="perimitarItem"
                             flat>Permitir</v-btn>
                 </v-card-actions>
             </v-card>
@@ -138,13 +137,13 @@ export default {
                 (response) => {
 
                     this.listItensAnalise = response.data
-
                 }
             )
 
         },
 
         analisar(item) {
+
             this.itemSelecionado = item
             this.dialog = true
         },
@@ -152,9 +151,18 @@ export default {
         perimitarItem() {
 
             const item_analise = {
-                
+                cd_item_analise: this.itemSelecionado.cd_item_analise,
+                cd_usuario_supervisor: this.$store.state.usuario.cd_usuario
             }
 
+
+            analiseItem.allowItem(item_analise).then(
+                (response) => {
+
+                    console.log(response)
+
+                }
+            )
         }
 
     },
