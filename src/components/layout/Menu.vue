@@ -83,9 +83,10 @@ export default {
                 { caminho: '/dashboard/admin', icone: 'account_balance', nome: 'Administração' },
                 { caminho: '/dashboard/gamificacao', icone: 'games', nome: 'Gamificação' },
                 { caminho: '/dashboard/analise_missoes', icone: 'description', nome: 'Analisar Missões' },
+                { caminho: '/dashboard/analisar_itens', icone: 'description', nome: 'Analisar Itens' },
                 { caminho: '/dashboard', icone: 'history', nome: 'Histórico' },
                 { caminho: '/dashboard/loja', icone: 'shopping_cart', nome: 'Loja' },
-                { caminho: '/dashboard/loja', icone: 'shopping_basket', nome: 'Meus Itens' },
+                { caminho: '/dashboard/meus_itens', icone: 'shopping_basket', nome: 'Meus Itens' },
                 { caminho: '/login', icone: 'input', nome: 'Sair' }
             ]
         }

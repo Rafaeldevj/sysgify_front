@@ -34,7 +34,8 @@
                             <v-card flat class="text-xs-center ma-3" elevation="5" dark>
                                 <v-responsive class="pt-4 img-missao">
                                     <v-avatar>
-                                        <img src="../../../assets/images/cart.png">
+                                        <img v-if="item.img_foto == null" src="../../../assets/images/box.png">
+                                        <img v-else :src="item.img_foto">
                                     </v-avatar>
                                 </v-responsive>
                                 <v-card-text>
@@ -90,8 +91,13 @@
                 <v-card-text>
                     <v-layout>
                         <v-flex xs5>
-                            <v-img
-                                    src="https://cdn.vuetifyjs.com/images/cards/foster.jpg"
+                            <v-img  v-if="itemSelecionado.img_foto == null"
+                                    src="./images/box.png"
+                                    height="125px"
+                                    contain
+                            ></v-img>
+                            <v-img  v-else
+                                    :src="itemSelecionado.img_foto"
                                     height="125px"
                                     contain
                             ></v-img>
@@ -122,6 +128,13 @@
                     >
                         Fechar
                     </v-btn>
+                    <v-btn v-if="$store.state.grupo.cd_grupo == 1"
+                            color="yellow"
+                            flat
+                            @click="navegar(`item/${itemSelecionado.cd_item}`)"
+                    >
+                        Editar
+                    </v-btn>
                     <v-spacer></v-spacer>
                     <v-btn
                         color="success"
@@ -130,6 +143,8 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
+
+        <LoaderSave :texto="textoLoarder" :dialog="dialogLoader" :cor="corLoader" :barra="barraLoader"></LoaderSave>
 
     </div>
 </template>
@@ -146,6 +161,10 @@ export default {
     data() {
         return {
             dialog: false,
+            dialogLoader: false,
+            corLoader: 'primary',
+            textoLoarder: 'Salvando Item',
+            barraLoader: true,
             listaItensLoja: [],
             itemSelecionado: {
                 cd_item: "",
@@ -176,6 +195,14 @@ export default {
 
     methods: {
 
+        setLoader(cor, texto, barra){
+
+            this.dialogLoader = true
+            this.corLoader = cor
+            this.textoLoarder = texto
+            this.barraLoader = barra
+        },
+
         navegar(pagina) {
             this.$router.push(pagina)
         },
@@ -197,13 +224,42 @@ export default {
 
         comprarItem(item) {
 
+            const usuarioItem = {
+                cd_usuario: this.$store.state.usuario.cd_usuario,
+                cd_item: item.cd_item
+            }
+
             if (item.nu_valor > this.$store.state.usuario.nu_moedas) {
 
-                alert('Moedas insuficientes!');
+                this.setLoader('error', 'Moedas insuficientes!', false)
+                setTimeout(() => { this.dialogLoader = false }, 1500)
 
             } else {
 
-                alert('Compra realizada!');
+                lojaService.buyItem(usuarioItem).then(
+                    (response) => {
+
+                        if (response.data[0].cod == 1) {
+
+                            this.setLoader('success', response.data[0].msg, false)
+
+                            this.$store.state.usuario.nu_moedas = response.data[0].usuario_saldo
+                            this.dialog = false
+
+                        } else {
+
+                            this.setLoader('error', response.data[0].msg, false)
+
+                        }
+
+                    }
+                ).catch(() => {
+                    this.setLoader('error', 'Falha no servidor', false)
+                }).finally(
+                    () => {
+                        setTimeout(() => { this.dialogLoader = false }, 1500)
+                    }
+                )
             }
 
         }

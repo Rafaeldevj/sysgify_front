@@ -17,6 +17,8 @@ import Ranking from './components/gamificacao/ranking/Ranking.vue'
 import EquipeListagem from "./components/gamificacao/equipe/EquipeListagem";
 import ItensListagem from "./components/gamificacao/loja/ItensListagem";
 import ItensCadastro from "./components/gamificacao/loja/ItensCadastro";
+import MeusItensListagem from "./components/gamificacao/loja/MeusItensListagem";
+import AnalisarItens from "./components/analise/AnalisarItens";
 
 //componentes da administração
 import Administracao from './components/administracao/AdministracaoInicio.vue'
@@ -52,6 +54,10 @@ export default new Router({
                 {
                     path: 'perfil_edicao',
                     component: PerfilEdicao
+                },
+                {
+                    path: 'meus_itens',
+                    component: MeusItensListagem
                 },
                 {
                     path: 'admin',
@@ -109,6 +115,10 @@ export default new Router({
                     path: 'item/:id',
                     component: ItensCadastro
                 },
+                {
+                    path: 'analisar_itens',
+                    component: AnalisarItens
+                }
             ]
         },
     ]
