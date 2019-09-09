@@ -27,7 +27,10 @@
                         </v-list-tile-avatar>
 
                         <v-list-tile-content>
-                            <v-list-tile-title>{{ item.nome }}</v-list-tile-title>
+                            <v-list-tile-title>
+                                <span class="yellow--text" v-if="$store.state.usuario.cd_usuario == item.id">{{ item.nome }}</span>
+                                <span v-else>{{ item.nome }}</span>
+                            </v-list-tile-title>
                             <v-list-tile-sub-title>Pontos: {{ item.pontos }} </v-list-tile-sub-title>
                         </v-list-tile-content>
 

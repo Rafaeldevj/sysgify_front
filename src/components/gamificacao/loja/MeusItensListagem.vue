@@ -30,7 +30,10 @@
                                     <div class="subheading">
                                         {{ item.item.nm_item }}
                                     </div>
-                                    <div class="subheading">
+                                    <div class="subheading green--text" v-if="item.utilizado == 2">
+                                        Item permitido para uso
+                                    </div>
+                                    <div class="subheading" v-else>
                                         Valor: <span class="yellow--text">{{ item.item.nu_valor }}</span> moedas
                                     </div>
 
@@ -47,12 +50,20 @@
                                             Item em análise
                                         </div>
                                     </v-card-text>
-
-                                    <v-card-text class="text-xs-center" v-else style="margin-top: -3px">
-                                        <div class="subheading green--text">
-                                            Item permitido para uso
+                                    <!--
+                                    <v-card-text class="text-xs-center" v-else style="margin-top: -12px">
+                                        <div class="subheading">
+                                            Código para uso: <span class="green--text">{{ item.codigo }}</span>
                                         </div>
-                                    </v-card-text>
+
+
+                                    </v-card-text>-->
+
+                                    <v-card-actions v-else>
+                                        <v-btn block color="indigo" style="color: white" @click="exibirCodigo(item.codigo)">
+                                            <span>Exibir código</span>
+                                        </v-btn>
+                                    </v-card-actions>
 
                                 </div>
                             </v-card>
@@ -157,6 +168,39 @@
             </v-card>
         </v-dialog>
 
+
+        <v-dialog
+                v-model="openCodigo"
+                persistent
+                width="400"
+                class="text-xs-center"
+        >
+            <v-card dark>
+
+                <v-card-text class="text-xs-center">
+                    <h2 class="title">Código do Item</h2>
+                </v-card-text>
+                <v-divider></v-divider>
+                <v-card-text class="text-xs-center">
+                    <h1 class="green--text">{{ codigo_item }}</h1>
+                </v-card-text>
+
+
+
+                <v-card-actions>
+                    <v-btn
+                            color="red"
+                            flat
+                            block
+                            @click="openCodigo = false"
+                    >
+                        Fechar
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+
+
     </div>
 </template>
 
@@ -171,6 +215,7 @@ export default {
     },
     data() {
         return {
+            openCodigo: false,
             dialodConfirmaItem: false,
             dialog: false,
             dialogLoader: false,
@@ -178,6 +223,7 @@ export default {
             textoLoarder: 'Carregando meus itens',
             barraLoader: true,
             meusItensLista: [],
+            codigo_item: '',
             itemSelecionado: {
                 cd_item: "",
                 nm_item: "",
@@ -222,8 +268,6 @@ export default {
 
         utilizarItem() {
 
-            console.log(this.itemUtilizado)
-
             lojaService.useItem(this.itemUtilizado).then(
                 (response) => {
 
@@ -238,6 +282,14 @@ export default {
 
                 }
             )
+
+        },
+
+        exibirCodigo(codigo) {
+
+            this.codigo_item = codigo
+
+            this.openCodigo = true
 
         }
 

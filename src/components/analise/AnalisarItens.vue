@@ -81,7 +81,7 @@
                             <v-card-title primary-title>
                                 <div>
                                     <div class="headline">Item: {{ itemSelecionado.nm_item }}</div>
-                                    <h3>Solicitante: <span class="yellow--text">{{ itemSelecionado.nm_usuario }} moedas</span></h3>
+                                    <h3>Solicitante: <span class="yellow--text">{{ itemSelecionado.nm_usuario }}</span></h3>
 
                                 </div>
                             </v-card-title>
@@ -110,16 +110,26 @@
             </v-card>
         </v-dialog>
 
+        <LoaderSave :texto="textoLoarder" :dialog="dialogLoader" :cor="corLoader" :barra="barraLoader"></LoaderSave>
+
     </div>
 </template>
 
 <script>
 import analiseItem from "../../services/analise/analiseItem";
+import LoaderSave from "../loader/LoaderSave";
 
 export default {
+    components: {
+        LoaderSave
+    },
     data() {
         return {
             dialog: false,
+            dialogLoader: false,
+            corLoader: 'primary',
+            textoLoarder: 'Carregando itens para análise',
+            barraLoader: true,
             listItensAnalise: [],
             itemSelecionado: {
                 nm_usuario: '',
@@ -131,12 +141,24 @@ export default {
         }
     },
     methods: {
+
+        setLoader(cor, texto, barra){
+
+            this.dialog = true
+            this.corLoader = cor
+            this.textoLoarder = texto
+            this.barraLoader = barra
+        },
+
         carregaItens() {
+
+            this.dialogLoader = true
 
             analiseItem.getItems().then(
                 (response) => {
 
                     this.listItensAnalise = response.data
+                    this.dialogLoader = false
                 }
             )
 
@@ -150,6 +172,9 @@ export default {
 
         perimitarItem() {
 
+            this.dialogLoader = true
+            this.setLoader('success', 'Permitindo item...', false)
+
             const item_analise = {
                 cd_item_analise: this.itemSelecionado.cd_item_analise,
                 cd_usuario_supervisor: this.$store.state.usuario.cd_usuario
@@ -159,10 +184,34 @@ export default {
             analiseItem.allowItem(item_analise).then(
                 (response) => {
 
-                    console.log(response)
+                    if (response.data.cd_item_analise > 0) {
+
+                        // EXIBIR MENSAGEM DE SUCESSO
+                        this.dialogLoader = false
+                        this.setLoader('success', 'Item permitido para uso!', false)
+                        this.dialogLoader = false
+                        this.dialog = false
+                        this.carregaItens()
+
+                    } else {
+
+                        // EXIBIR MENSAGEM DE ERRO
+                        this.setLoader('error', 'Falha na permissão do item!', false)
+                        this.dialogLoader = false
+                        this.dialog = false
+
+                    }
+
 
                 }
-            )
+            ).catch(() => {
+
+                // EXIBIR MENSAGEM DE ERRO
+                this.setLoader('error', 'Servidor fora do ar!', false)
+                this.dialogLoader = false
+                this.dialog = false
+
+            })
         }
 
     },
