@@ -19,6 +19,8 @@ import ItensListagem from "./components/gamificacao/loja/ItensListagem";
 import ItensCadastro from "./components/gamificacao/loja/ItensCadastro";
 import MeusItensListagem from "./components/gamificacao/loja/MeusItensListagem";
 import AnalisarItens from "./components/analise/AnalisarItens";
+import AtivarItem from "./components/gamificacao/loja/AtivarItem";
+import MonitorMissoes from "./components/MonitorMissoes";
 
 //componentes da administração
 import Administracao from './components/administracao/AdministracaoInicio.vue'
@@ -118,6 +120,14 @@ export default new Router({
                 {
                     path: 'analisar_itens',
                     component: AnalisarItens
+                },
+                {
+                    path: 'ativar_item',
+                    component: AtivarItem
+                },
+                {
+                    path: 'monitor',
+                    component: MonitorMissoes
                 }
             ]
         },
