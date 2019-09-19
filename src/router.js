@@ -43,11 +43,11 @@ export default new Router({
         {
             path: '/dashboard',
             component: Dashboard,
-            redirect: '/dashboard/inicio',
+            redirect: '/dashboard/monitor',
             children: [
                 {
                     path: 'inicio',
-                    component: Inicio
+                    component: MonitorMissoes
                 },
                 {
                     path: 'perfil',

@@ -22,7 +22,7 @@
                             <v-card flat class="text-xs-center ma-3" elevation="5" dark>
                                 <v-responsive class="pt-4 img-missao">
                                     <v-avatar>
-                                        <img v-if="item.item.img_foto == null" src="../../../assets/images/box.png">
+                                        <img v-if="item.item.img_foto == null || item.item.img_foto == undefined" src="../../../assets/images/box.png">
                                         <img v-else :src="item.item.img_foto">
                                     </v-avatar>
                                 </v-responsive>
@@ -245,9 +245,16 @@ export default {
 
             lojaService.getMyItems(this.$store.state.usuario.cd_usuario).then(
                 (response) => {
-                    this.meusItensLista = response.data
 
-                    this.dialogLoader = false
+                    if (response.data[0].cod != 2) {
+
+                        this.meusItensLista = response.data
+
+                        this.dialogLoader = false
+
+                    } else {
+                        this.dialogLoader = false
+                    }
                 }
             ).catch(
                 () => {

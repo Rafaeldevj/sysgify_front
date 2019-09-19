@@ -95,20 +95,20 @@
                         </v-card-text>
                         <v-divider></v-divider>
                         <v-layout
-                        tag="v-card-text"
-                        text-xs-left
-                        wrap
-                        >
-                        <v-flex tag="strong" xs5 text-xs-right mr-3 mb-2>Grupo:</v-flex>
-                        <v-flex>{{ usuarioDados.grupo }}</v-flex>
-                        <v-flex tag="strong" xs5 text-xs-right mr-3 mb-2>Nível:</v-flex>
-                        <v-flex>
-                            {{ usuarioDados.nivel }}
-                        </v-flex>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <br>
-                        <v-flex tag="strong" xs5 text-xs-right mr-3 mb-2>Data de Cadastro:</v-flex>
-                        <v-flex>{{ usuarioDados.dt_cadastro }}</v-flex>
+                            tag="v-card-text"
+                            text-xs-left
+                            wrap
+                            >
+                            <v-flex tag="strong" xs5 text-xs-right mr-3 mb-2>Grupo:</v-flex>
+                            <v-flex>{{ usuarioDados.grupo }}</v-flex>
+                            <v-flex tag="strong" xs5 text-xs-right mr-3 mb-2>Nível:</v-flex>
+                            <v-flex>
+                                {{ usuarioDados.nivel }}
+                            </v-flex>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <br>
+                            <v-flex tag="strong" xs5 text-xs-right mr-3 mb-2>Data de Cadastro:</v-flex>
+                            <v-flex>{{ usuarioDados.dt_cadastro }}</v-flex>
                         </v-layout>
                     </v-card>
                 </v-card-text>

@@ -14,8 +14,8 @@
                         <v-container fluid grid-list-xl pa-1>
                             <v-layout row justify-space-between>
                                 <v-flex xs12 md12>
-                                    <v-toolbar-title class="white--text">
-                                        <v-icon>description</v-icon> Em Aberto {{ listaMissoesEmAberto.length }}
+                                    <v-toolbar-title class="white--text missoes-label">
+                                        <v-icon size="20">description</v-icon> Em Aberto {{ listaMissoesEmAberto.length }}
                                     </v-toolbar-title>
                                 </v-flex>
                             </v-layout>
@@ -26,9 +26,9 @@
                     <v-card-text>
 
                         <v-layout row wrap>
-                            <v-flex v-for="missao in listaMissoesEmAberto" grow pa-1 md3 xs12 :key="missao.cd_usuario_missao">
+                            <v-flex v-for="missao in listaMissoesEmAberto" grow pa-0 md12 xs12 :key="missao.cd_usuario_missao">
 
-                                <v-card flat class="text-xs-center ma-3" elevation="5" dark>
+                                <v-card flat class="text-xs-center ma-1" elevation="5" dark>
 
                                     <v-card-text>
                                         <div class="subheading">
@@ -61,8 +61,8 @@
                         <v-container fluid grid-list-xl pa-1>
                             <v-layout row justify-space-between>
                                 <v-flex xs12 md12>
-                                    <v-toolbar-title class="white--text">
-                                        <v-icon>description</v-icon> Em Andamento {{ listaMissoesEmAndamento.length }}
+                                    <v-toolbar-title class="white--text missoes-label">
+                                        <v-icon size="20">description</v-icon> Em Andamento {{ listaMissoesEmAndamento.length }}
                                     </v-toolbar-title>
                                 </v-flex>
                             </v-layout>
@@ -73,9 +73,9 @@
                     <v-card-text>
 
                         <v-layout row wrap>
-                            <v-flex v-for="missao in listaMissoesEmAndamento" grow pa-1 md3 xs12 :key="missao.cd_usuario_missao">
+                            <v-flex v-for="missao in listaMissoesEmAndamento" grow pa-0 md12 xs12 :key="missao.cd_usuario_missao">
 
-                                <v-card flat class="text-xs-center ma-3" elevation="5" dark>
+                                <v-card flat class="text-xs-center ma-1" elevation="5" dark>
 
                                     <v-card-text>
                                         <div class="subheading">
@@ -108,8 +108,8 @@
                         <v-container fluid grid-list-xl pa-1>
                             <v-layout row justify-space-between>
                                 <v-flex xs12 md12>
-                                    <v-toolbar-title class="white--text">
-                                       <v-icon>description</v-icon> Em Análise {{ listaMissoesEmAnalise.length }}
+                                    <v-toolbar-title class="white--text missoes-label">
+                                       <v-icon size="20">description</v-icon> Em Análise {{ listaMissoesEmAnalise.length }}
                                     </v-toolbar-title>
                                 </v-flex>
                             </v-layout>
@@ -155,8 +155,8 @@
                         <v-container fluid grid-list-xl pa-1>
                             <v-layout row justify-space-between>
                                 <v-flex xs12 md12>
-                                    <v-toolbar-title class="white--text">
-                                        <v-icon>description</v-icon> Finalizadas {{ listaMissoesFinalizadas.length }}
+                                    <v-toolbar-title class="white--text missoes-label">
+                                        <v-icon size="20">description</v-icon> Finalizadas {{ listaMissoesFinalizadas.length }}
                                     </v-toolbar-title>
                                 </v-flex>
                             </v-layout>
@@ -199,8 +199,8 @@
                         <v-container fluid grid-list-xl pa-1>
                             <v-layout row justify-space-between>
                                 <v-flex xs12 md12>
-                                    <v-toolbar-title class="white--text">
-                                        <v-icon>description</v-icon> Pausadas {{ listaMissoesPausadas.length }}
+                                    <v-toolbar-title class="white--text missoes-label">
+                                        <v-icon size="20">description</v-icon> Pausadas {{ listaMissoesPausadas.length }}
                                     </v-toolbar-title>
                                 </v-flex>
                             </v-layout>
@@ -274,7 +274,44 @@
                         </v-flex>
                     </v-layout>
                     <br>
-                    <div><strong>Descrição da Missão:</strong> {{ dadosMissao.missao.ds_missao }}</div>
+                    <v-divider></v-divider>
+                    <v-card-text class="text-xs-center">
+                        <!--<h3>Prazo: <span class="yellow--text">{{ dadosMissao.dt_prazo }}</span> </h3>-->
+
+                        <v-layout row fill-height wrap lass="text-xs-center">
+
+                            <v-flex xs12 pa-1 md6 class="text-md-right">
+                                <h3>Delegada em:</h3>
+                            </v-flex>
+                            <v-flex xs12 pa-1 md6 class="text-md-left">
+                                <h3 class="yellow--text">{{ dadosMissao.dt_cadastro }}</h3>
+                            </v-flex>
+
+                            <v-flex xs12 pa-1 md6 class="text-md-right">
+                                <h3>Prazo:</h3>
+                            </v-flex>
+                            <v-flex xs12 pa-1 md6 class="text-md-left">
+                                <h3 class="yellow--text">{{ dadosMissao.dt_prazo }}</h3>
+                            </v-flex>
+
+                            <v-flex xs12 pa-1 md6 class="text-md-right">
+                                <h3>Dificuldade:</h3>
+                            </v-flex>
+                            <v-flex xs12 pa-1 md6 :class="classeDificuldade">
+                                <h3>{{ retornaDificuldadeMissao(dadosMissao.missao.cd_missao_dificuldade) }}</h3>
+                            </v-flex>
+
+                            <v-flex xs12 pa-1 md6 class="text-md-right">
+                                <h3>Status:</h3>
+                            </v-flex>
+                            <v-flex xs12 pa-1 md6 class="text-md-left">
+                                <h3 class="cyan--text">{{ dadosMissao.cd_missao_status.nm_missao_status }}</h3>
+                            </v-flex>
+
+                        </v-layout>
+                    </v-card-text>
+
+                    <div class="subheading"><strong>Descrição da Missão:</strong> {{ dadosMissao.missao.ds_missao }}</div>
                 </v-card-text>
 
                 <v-card-actions>
@@ -285,10 +322,13 @@
                         Fechar
                     </v-btn>
                     <v-spacer></v-spacer>
-                    <v-btn color="cyan darken-2"  v-if="dadosMissao.cd_missao_status.cd_missao_status == 1">Iniciar Missão</v-btn>
-                    <v-btn color="cyan darken-2"  v-if="dadosMissao.cd_missao_status.cd_missao_status == 2">Enviar para Análise</v-btn>
-                    <v-btn color="cyan darken-2"  v-if="dadosMissao.cd_missao_status.cd_missao_status == 3">Finalizar Missão</v-btn>
-                    <v-btn color="cyan darken-2"  v-if="dadosMissao.cd_missao_status.cd_missao_status == 4">Retomar Missão</v-btn>
+                    <v-btn color="default" v-if="dadosMissao.cd_missao_status.cd_missao_status < 4 && $store.state.grupo.cd_grupo == 1" @click="pausarMissao(dadosMissao)">Pausar Missão</v-btn>
+                    <v-btn color="default" v-if="dadosMissao.cd_missao_status.cd_missao_status < 4 && $store.state.grupo.cd_grupo != 1" @click="solicitarPausa(dadosMissao)">Solicitar Pausa</v-btn>
+
+                    <v-btn color="cyan darken-2"  v-if="dadosMissao.cd_missao_status.cd_missao_status == 1" @click="mudarStatusMissao(dadosMissao)">Iniciar Missão</v-btn>
+                    <v-btn color="cyan darken-2"  v-if="dadosMissao.cd_missao_status.cd_missao_status == 2" @click="mudarStatusMissao(dadosMissao)">Enviar para Análise</v-btn>
+                    <!--<v-btn color="cyan darken-2"  v-if="dadosMissao.cd_missao_status.cd_missao_status == 3" @click="mudarStatusMissao(dadosMissao)">Finalizar Missão</v-btn>-->
+                    <v-btn color="cyan darken-2"  v-if="dadosMissao.cd_missao_status.cd_missao_status == 4 && $store.state.grupo.cd_grupo == 1" @click="mudarStatusMissao(dadosMissao)">Retomar Missão</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
@@ -304,6 +344,7 @@ export default {
     data() {
         return {
             dialog: false,
+            classeDificuldade: 'text-md-left',
             listaMissoesEmAberto: [],
             listaMissoesEmAndamento: [],
             listaMissoesEmAnalise: [],
@@ -335,7 +376,20 @@ export default {
     },
 
     methods: {
+
+        limparListas() {
+
+            this.listaMissoesEmAberto = []
+            this.listaMissoesEmAndamento = []
+            this.listaMissoesEmAnalise = []
+            this.listaMissoesFinalizadas = []
+            this.listaMissoesPausadas = []
+
+        },
+
         carregaMinhasMissoes() {
+
+            this.limparListas()
 
             inicio.missoesUsuario(this.$store.state.usuario.cd_usuario).then(
                 (response) => {
@@ -373,9 +427,126 @@ export default {
             this.dialog = true
 
             this.dadosMissao = data
+        },
 
-            console.log(data)
-        }
+        retornaDificuldadeMissao(dificuldade) {
+            switch (dificuldade) {
+                case 1:
+                    this.classeDificuldade = "text-md-left green--text"
+                    return "Fácil"
+                case 2:
+                    this.classeDificuldade = "text-md-left yellow--text"
+                    return "Média"
+                case 3:
+                    this.classeDificuldade = "text-md-left red--text"
+                    return "Difícil"
+                case 4:
+                    this.classeDificuldade = "text-md-left red--text"
+                    return "Muito Difícil"
+            }
+        },
+
+        pausarMissao(id) {
+
+            inicio.pausarMissao(id.cd_usuario_missao).then(
+                (response) => {
+
+                    if (response.data.cd_usuario_missao > 0) {
+
+                        this.carregaMinhasMissoes(this.$store.state.usuario.cd_usuario)
+                        this.dialog = false
+                    }
+
+                }
+            )
+
+        },
+
+        solicitarPausa(id) {
+
+            inicio.solicitarPausa(id.cd_usuario_missao).then(
+                (response) => {
+
+                    if (response.data.cd_usuario_missao > 0) {
+
+                        this.carregaMinhasMissoes(this.$store.state.usuario.cd_usuario)
+                        this.dialog = false
+                    }
+
+                }
+            )
+
+        },
+
+        mudarStatusMissao(status) {
+
+            switch (status.cd_missao_status.cd_missao_status) {
+                case 1:
+
+                    inicio.iniciarMissao(status).then(
+                        (response) => {
+
+                            if (response.data.cd_usuario_missao > 0) {
+
+                                this.carregaMinhasMissoes(this.$store.state.usuario.cd_usuario)
+                                this.dialog = false
+                            }
+
+                        }
+                    )
+                    break
+
+                case 2:
+
+                    inicio.analisarMissao(status).then(
+                        (response) => {
+
+                            if (response.data.cd_usuario_missao > 0) {
+
+                                this.carregaMinhasMissoes(this.$store.state.usuario.cd_usuario)
+                                this.dialog = false
+                            }
+
+                        }
+                    )
+                    break
+
+                case 3:
+                    inicio.finalizarMissao(status).then(
+                        (response) => {
+
+                            if (response.data.cd_usuario_missao > 0) {
+
+                                this.carregaMinhasMissoes(this.$store.state.usuario.cd_usuario)
+                                this.dialog = false
+                            }
+
+                        }
+                    )
+                    break
+
+                case 4:
+                    inicio.retomarMissao(status.cd_usuario_missao).then(
+                        (response) => {
+
+                            if (response.data.cd_usuario_missao > 0) {
+
+                                this.carregaMinhasMissoes(this.$store.state.usuario.cd_usuario)
+                                this.dialog = false
+                            }
+
+                        }
+                    )
+                    break
+                case 5:
+                    alert("Missão Finalizada")
+                    break
+                default:
+                    break
+            }
+
+        },
+
     },
 
     mounted() {
@@ -385,5 +556,7 @@ export default {
 </script>
 
 <style scoped>
-
+.missoes-label {
+    font-size: medium;
+}
 </style>
