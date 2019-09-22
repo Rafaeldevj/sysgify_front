@@ -34,7 +34,9 @@
                                         <div class="subheading">
                                             {{ missao.missao.nm_missao }}
                                         </div>
-
+                                        <div class="subheading">
+                                            Prazo: <span class="yellow--text">{{ missao.dt_prazo }}</span>
+                                        </div>
 
                                     </v-card-text>
                                     <div class="text-xs-center">
@@ -81,7 +83,9 @@
                                         <div class="subheading">
                                             {{ missao.missao.nm_missao }}
                                         </div>
-
+                                        <div class="subheading">
+                                            Prazo: <span class="yellow--text">{{ missao.dt_prazo }}</span>
+                                        </div>
 
                                     </v-card-text>
                                     <div class="text-xs-center">
@@ -200,7 +204,7 @@
                             <v-layout row justify-space-between>
                                 <v-flex xs12 md12>
                                     <v-toolbar-title class="white--text missoes-label">
-                                        <v-icon size="20">description</v-icon> Pausadas {{ listaMissoesPausadas.length }}
+                                        <v-icon size="20">description</v-icon> Novo Prazo Solicitado {{ listaMissoesNovoPrazo.length }}
                                     </v-toolbar-title>
                                 </v-flex>
                             </v-layout>
@@ -210,7 +214,7 @@
                     <v-divider></v-divider>
                     <v-card-text>
 
-                        <v-flex v-for="missao in listaMissoesPausadas" grow pa-0 md12 xs12 :key="missao.cd_usuario_missao">
+                        <v-flex v-for="missao in listaMissoesNovoPrazo" grow pa-0 md12 xs12 :key="missao.cd_usuario_missao">
 
                             <v-card flat class="text-xs-center ma-1" elevation="5" dark>
 
@@ -322,14 +326,51 @@
                         Fechar
                     </v-btn>
                     <v-spacer></v-spacer>
-                    <v-btn color="default" v-if="dadosMissao.cd_missao_status.cd_missao_status < 4 && $store.state.grupo.cd_grupo == 1" @click="pausarMissao(dadosMissao)">Pausar Missão</v-btn>
-                    <v-btn color="default" v-if="dadosMissao.cd_missao_status.cd_missao_status < 4 && $store.state.grupo.cd_grupo != 1" @click="solicitarPausa(dadosMissao)">Solicitar Pausa</v-btn>
+                    <v-btn color="yellow darken-2" v-if="dadosMissao.cd_missao_status.cd_missao_status < 3" @click="solicitarNovoPrazoModal(dadosMissao)">Novo Prazo</v-btn>
 
                     <v-btn color="cyan darken-2"  v-if="dadosMissao.cd_missao_status.cd_missao_status == 1" @click="mudarStatusMissao(dadosMissao)">Iniciar Missão</v-btn>
                     <v-btn color="cyan darken-2"  v-if="dadosMissao.cd_missao_status.cd_missao_status == 2" @click="mudarStatusMissao(dadosMissao)">Enviar para Análise</v-btn>
-                    <!--<v-btn color="cyan darken-2"  v-if="dadosMissao.cd_missao_status.cd_missao_status == 3" @click="mudarStatusMissao(dadosMissao)">Finalizar Missão</v-btn>-->
-                    <v-btn color="cyan darken-2"  v-if="dadosMissao.cd_missao_status.cd_missao_status == 4 && $store.state.grupo.cd_grupo == 1" @click="mudarStatusMissao(dadosMissao)">Retomar Missão</v-btn>
                 </v-card-actions>
+            </v-card>
+        </v-dialog>
+
+
+
+        <v-dialog
+                v-model="dialogNovoPrazo"
+                persistent
+                width="600"
+        >
+            <v-card >
+
+                <v-card-text class="text-xs-center">
+                    <h2 class="title">Solicitação de Novo Prazo</h2>
+                </v-card-text>
+                <v-divider></v-divider>
+                <form @submit.prevent="solicitarNovoPrazo">
+                    <v-card-text>
+
+                        <v-textarea
+                                label="Motivo da Solicitação"
+                                v-model="novoPrazo.ds_motivo_prazo"
+                                required
+                        ></v-textarea>
+
+                    </v-card-text>
+
+                    <v-card-actions>
+                        <v-btn
+                                color="red"
+                                type="button"
+                                flat
+                                @click="dialogNovoPrazo = false"
+                        >
+                            Fechar
+                        </v-btn>
+                        <v-spacer></v-spacer>
+                        <v-btn type="submit" color="primary" flat dark >Enviar</v-btn>
+                    </v-card-actions>
+                </form>
             </v-card>
         </v-dialog>
 
@@ -344,12 +385,13 @@ export default {
     data() {
         return {
             dialog: false,
+            dialogNovoPrazo: false,
             classeDificuldade: 'text-md-left',
             listaMissoesEmAberto: [],
             listaMissoesEmAndamento: [],
             listaMissoesEmAnalise: [],
             listaMissoesFinalizadas: [],
-            listaMissoesPausadas: [],
+            listaMissoesNovoPrazo: [],
             dadosMissao: {
                 cd_missao_status: {
                     cd_missao_status: '',
@@ -371,6 +413,10 @@ export default {
                 dt_atualizacao: '',
                 dt_cadastro: '',
                 dt_prazo: ''
+            },
+            novoPrazo: {
+                cd_usuario_missao: '',
+                ds_motivo_prazo: ''
             }
         }
     },
@@ -383,7 +429,7 @@ export default {
             this.listaMissoesEmAndamento = []
             this.listaMissoesEmAnalise = []
             this.listaMissoesFinalizadas = []
-            this.listaMissoesPausadas = []
+            this.listaMissoesNovoPrazo = []
 
         },
 
@@ -409,7 +455,7 @@ export default {
                         }
 
                         if (response.data[i].cd_missao_status.cd_missao_status == 4) {
-                            this.listaMissoesPausadas = this.listaMissoesPausadas.concat(response.data[i])
+                            this.listaMissoesNovoPrazo = this.listaMissoesNovoPrazo.concat(response.data[i])
                         }
 
                         if (response.data[i].cd_missao_status.cd_missao_status == 5) {
@@ -446,31 +492,32 @@ export default {
             }
         },
 
-        pausarMissao(id) {
+        limparNovoPrazo() {
 
-            inicio.pausarMissao(id.cd_usuario_missao).then(
-                (response) => {
-
-                    if (response.data.cd_usuario_missao > 0) {
-
-                        this.carregaMinhasMissoes(this.$store.state.usuario.cd_usuario)
-                        this.dialog = false
-                    }
-
-                }
-            )
+            this.novoPrazo.cd_usuario_missao = ''
+            this.novoPrazo.ds_motivo_prazo = ''
 
         },
 
-        solicitarPausa(id) {
+        solicitarNovoPrazoModal(dados) {
 
-            inicio.solicitarPausa(id.cd_usuario_missao).then(
+            this.limparNovoPrazo()
+            this.dialogNovoPrazo = true
+            this.novoPrazo.cd_usuario_missao = dados.cd_usuario_missao
+
+        },
+
+        solicitarNovoPrazo() {
+
+            inicio.novoPrazo(this.novoPrazo).then(
                 (response) => {
 
                     if (response.data.cd_usuario_missao > 0) {
 
                         this.carregaMinhasMissoes(this.$store.state.usuario.cd_usuario)
                         this.dialog = false
+                        this.dialogNovoPrazo = false
+
                     }
 
                 }

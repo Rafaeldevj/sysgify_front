@@ -2,7 +2,7 @@
     <div>
         <v-layout row wrap>
             <v-flex grow pa-1>
-                <h1>Perfil</h1>
+                <h2>Perfil</h2>
             </v-flex>
         </v-layout>
         <v-layout row wrap>
@@ -184,7 +184,39 @@
                     <div v-if="!carregando" class="dados">
                         
                         <v-card-text>
-                            <div class="subheading titulo">
+
+                            <v-layout row wrap>
+
+                                <v-flex xs12 md3 v-for="item in listaMinhasConquistas" :key="item.cd_conquista">
+
+                                    <v-card flat class="text-xs-center ma-3" elevation="5" dark>
+                                        <v-responsive class="pt-4">
+                                            <v-avatar tile>
+                                                <img :src="item.img_conquista">
+                                            </v-avatar>
+                                        </v-responsive>
+                                        <v-card-text>
+                                            <div class="subheading yellow--text">
+                                                {{ item.nm_conquista }}
+                                            </div>
+                                            <div class="grey--text">
+                                                Concedida em: {{ item.dt_cadastro }}
+                                            </div>
+                                        </v-card-text>
+                                        <!--<div class="text-xs-center">
+                                            <v-card-actions>
+                                                <v-btn block color="teal" style="color: white">
+                                                    <span>Acessar</span>
+                                                </v-btn>
+                                            </v-card-actions>
+                                        </div>-->
+                                    </v-card>
+
+                                </v-flex>
+
+                            </v-layout>
+
+                            <div class="subheading titulo" v-if="listaMinhasConquistas.length == 0">
                                 <h4>Nenhuma conquista realizada!</h4>
                             </div>           
                         </v-card-text>
@@ -206,6 +238,7 @@
 <script>
 
 import perfilService from '../services/perfil'
+import conquista from "../services/gamificacao/conquista";
 import Loader from './loader/Loader'
 
 export default {
@@ -218,7 +251,8 @@ export default {
             img_moedas: './images/coins.png',
             progresso: 0,
             carregando: true,
-            nivel_xp_max: 0
+            nivel_xp_max: 0,
+            listaMinhasConquistas: []
         }
     },
     methods: {
@@ -265,10 +299,20 @@ export default {
             this.$router.push(pagina)
         },
 
+        carregaMinhasConquistas() {
+            conquista.getMyConquistas(this.$store.state.usuario.cd_usuario).then(
+                (response) => {
+                    console.log(response)
+                    this.listaMinhasConquistas = response.data
+                }
+            )
+        }
+
     },
     mounted() {
         
         this.informacaoNivel()
+        this.carregaMinhasConquistas()
     }
 }
 </script>

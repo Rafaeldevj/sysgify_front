@@ -18,7 +18,7 @@
 
                     <v-list-tile-content>
                         <v-list-tile-title>
-                            {{ this.$store.state.usuario.nm_apelido }}
+                            {{ $store.state.usuario.nm_apelido }}
                         </v-list-tile-title>
                         <v-list-tile-sub-title>
                             <strong>Nível: {{ this.$store.state.usuario.nu_nivel }}</strong>

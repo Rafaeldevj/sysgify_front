@@ -27,7 +27,7 @@
                         <v-container fluid grid-list-lg pa-1 class="text-xs-center">
                             <v-layout row wrap align-center justify-center>
                                 <v-flex md-3></v-flex>
-                                <v-flex xs12 md4>
+                                <v-flex xs12 md6>
                                     <v-text-field
                                             prepend-inner-icon="code"
                                             style="font-size: x-large; text-align: center"

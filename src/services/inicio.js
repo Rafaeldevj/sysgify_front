@@ -35,6 +35,11 @@ export default {
     retomarMissao(id) {
 
         return http.get(`/usuarioMissao/retomarMissao/${id}`)
+    },
+
+    novoPrazo(data) {
+
+        return http.post('usuarioMissao/novoPrazo', data);
     }
 
 }

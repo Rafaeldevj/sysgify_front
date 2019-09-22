@@ -21,6 +21,7 @@ import MeusItensListagem from "./components/gamificacao/loja/MeusItensListagem";
 import AnalisarItens from "./components/analise/AnalisarItens";
 import AtivarItem from "./components/gamificacao/loja/AtivarItem";
 import MonitorMissoes from "./components/MonitorMissoes";
+import ConquistaListagem from "./components/gamificacao/conquistas/ConquistaListagem";
 
 //componentes da administração
 import Administracao from './components/administracao/AdministracaoInicio.vue'
@@ -100,6 +101,10 @@ export default new Router({
                 {
                     path: 'ranking',
                     component: Ranking
+                },
+                {
+                    path: 'conquistas',
+                    component: ConquistaListagem
                 },
                 {
                     path: 'equipes',
